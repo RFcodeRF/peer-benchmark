@@ -45,6 +45,12 @@ function readPrices(key) {
   const candidates = fs.readdirSync(dir).filter((f) => f.toLowerCase().startsWith(key.toLowerCase() + "_prices") && /\.(xlsx|xls|csv)$/i.test(f));
   if (!candidates.length) return null;
   const file = path.join(dir, candidates[0]);
+  if (file.toLowerCase().endsWith(".csv")) {
+    const lines = fs.readFileSync(file, "utf8").trim().split(/\r?\n/).slice(1);
+    const rowsCsv = lines.map((l) => l.split(",")).map(([d, p]) => ({ date: d.trim(), price: Number(p), marketCap: null })).filter((r) => /^\d{4}-\d{2}-\d{2}$/.test(r.date) && r.price > 0);
+    rowsCsv.sort((a, b) => a.date.localeCompare(b.date));
+    return { file: path.basename(file), header: ["Date", "Close"], rows: rowsCsv };
+  }
   const wb = XLSX.readFile(file, { cellDates: true });
   const ws = wb.Sheets[wb.SheetNames[0]];
   const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: null });
@@ -166,7 +172,7 @@ for (const [peer, c] of Object.entries(cfg.peers)) {
 
       // Private Excel-Prüfdatei für MONY (2 Jahre wöchentlich, lokal): Nachrechnung mit SLOPE und RSQ
       if (peer === "mony" && prefix === "local" && suffix === "w2y") {
-        const aoa = [["Stichtag", "Kursdatum Aktie", "Kurs MONY", "Kursdatum Index", "FTSE All-Share", "Rendite MONY", "Rendite Index"]];
+        const aoa = [["Stichtag", "Kursdatum Aktie", "Kursindex MONY (Basis 100)", "Kursdatum Index", "FTSE All-Share (Basis 100)", "Rendite MONY", "Rendite Index"]];
         s.forEach((x, i) => {
           const r = i + 2;
           aoa.push([x.anchor, x.date, x.price, m[i].date, m[i].price, i === 0 ? null : { f: `IF(AND(ISNUMBER(C${r}),ISNUMBER(C${r - 1}),ISNUMBER(E${r}),ISNUMBER(E${r - 1})),C${r}/C${r - 1}-1,"")` }, i === 0 ? null : { f: `IF(AND(ISNUMBER(C${r}),ISNUMBER(C${r - 1}),ISNUMBER(E${r}),ISNUMBER(E${r - 1})),E${r}/E${r - 1}-1,"")` }]);
@@ -188,7 +194,7 @@ for (const [peer, c] of Object.entries(cfg.peers)) {
 const out = {
   meta: {
     status: Object.keys(result).length ? "berechnet" : "ausstehend",
-    priceSource: "S&P Capital IQ, tägliche Schlusskurse, split-bereinigt, Landeswährung; Rohdaten nicht veröffentlicht",
+    priceSource: "S&P Capital IQ (Chart Builder), tägliche Schlusskurse als Kursveränderung, Preisindizes, Landeswährung; MSCI World in GBP und EUR über Wechselkurse umgerechnet; Rohdaten nicht veröffentlicht",
     priceDate: CUTOFF,
     computedAt: new Date().toISOString().slice(0, 10),
     method: `Regression der Aktienrendite auf die Indexrendite (kleinste Quadrate). Wöchentlich: Schlusskurs am Freitag oder letzter Handelstag davor, ${cfg.weeks} Wochen bis ${CUTOFF}. Monatlich: Schlusskurs am 20. jedes Monats oder letzter Handelstag davor, ${cfg.months} Monate bis ${CUTOFF}.`,

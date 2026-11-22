@@ -1,10 +1,391 @@
 {
   "meta": {
-    "status": "ausstehend",
-    "priceSource": "S&P Capital IQ, tägliche Schlusskurse, split-bereinigt, Landeswährung; Rohdaten nicht veröffentlicht",
+    "status": "berechnet",
+    "priceSource": "S&P Capital IQ (Chart Builder), tägliche Schlusskurse als Kursveränderung, Preisindizes, Landeswährung; MSCI World in GBP und EUR über Wechselkurse umgerechnet; Rohdaten nicht veröffentlicht",
     "priceDate": "2026-11-20",
-    "computedAt": "",
-    "method": "Regression der Aktienrendite auf die Indexrendite (kleinste Quadrate). Wöchentlich: Schlusskurs am Freitag oder letzter Handelstag davor, 104 Wochen bis 20.11.2026. Monatlich: Schlusskurs am 20. jedes Monats oder letzter Handelstag davor, 60 Monate bis 20.11.2026."
+    "computedAt": "2026-11-22",
+    "method": "Regression der Aktienrendite auf die Indexrendite (kleinste Quadrate). Wöchentlich: Schlusskurs am Freitag oder letzter Handelstag davor, 104 Wochen bis 2026-11-20. Monatlich: Schlusskurs am 20. jedes Monats oder letzter Handelstag davor, 60 Monate bis 2026-11-20."
   },
-  "peers": {}
+  "peers": {
+    "mony": {
+      "local_w2y": {
+        "beta": 0.862,
+        "r2": 0.1596,
+        "n": 104,
+        "index": "FTSE All-Share",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 0.7261,
+        "r2": 0.1343,
+        "n": 60,
+        "index": "FTSE All-Share",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 0.4029,
+        "r2": 0.0453,
+        "n": 104,
+        "index": "MSCI World (GBP)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 0.6661,
+        "r2": 0.1432,
+        "n": 60,
+        "index": "MSCI World (GBP)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "moltiply": {
+      "local_w2y": {
+        "beta": 0.7442,
+        "r2": 0.0991,
+        "n": 104,
+        "index": "FTSE Italia All-Share",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 1.2506,
+        "r2": 0.4008,
+        "n": 60,
+        "index": "FTSE Italia All-Share",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 0.9937,
+        "r2": 0.1265,
+        "n": 104,
+        "index": "MSCI World (EUR)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 0.9246,
+        "r2": 0.1551,
+        "n": 60,
+        "index": "MSCI World (EUR)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "everquote": {
+      "local_w2y": {
+        "beta": 0.6169,
+        "r2": 0.0242,
+        "n": 104,
+        "index": "S&P 500",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 1.3168,
+        "r2": 0.0768,
+        "n": 60,
+        "index": "S&P 500",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 0.6846,
+        "r2": 0.0251,
+        "n": 104,
+        "index": "MSCI World (USD)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 1.6298,
+        "r2": 0.1064,
+        "n": 60,
+        "index": "MSCI World (USD)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "lendingtree": {
+      "local_w2y": {
+        "beta": 0.6649,
+        "r2": 0.0255,
+        "n": 104,
+        "index": "S&P 500",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 1.61,
+        "r2": 0.0967,
+        "n": 60,
+        "index": "S&P 500",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 0.7415,
+        "r2": 0.0268,
+        "n": 104,
+        "index": "MSCI World (USD)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 2.0331,
+        "r2": 0.1395,
+        "n": 60,
+        "index": "MSCI World (USD)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "nerdwallet": {
+      "local_w2y": {
+        "beta": 0.9462,
+        "r2": 0.0838,
+        "n": 104,
+        "index": "S&P 500",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 1.5552,
+        "r2": 0.156,
+        "n": 60,
+        "index": "S&P 500",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 1.0312,
+        "r2": 0.0839,
+        "n": 104,
+        "index": "MSCI World (USD)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 1.6567,
+        "r2": 0.1601,
+        "n": 60,
+        "index": "MSCI World (USD)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "trivago": {
+      "local_w2y": {
+        "beta": 0.912,
+        "r2": 0.0344,
+        "n": 104,
+        "index": "S&P 500",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 0.5431,
+        "r2": 0.0211,
+        "n": 60,
+        "index": "S&P 500",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 1.0419,
+        "r2": 0.0378,
+        "n": 104,
+        "index": "MSCI World (USD)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 0.6972,
+        "r2": 0.0315,
+        "n": 60,
+        "index": "MSCI World (USD)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "hypoport": {
+      "local_w2y": {
+        "beta": 1.2348,
+        "r2": 0.1678,
+        "n": 104,
+        "index": "CDAX",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 2.2897,
+        "r2": 0.3649,
+        "n": 60,
+        "index": "CDAX",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 0.8477,
+        "r2": 0.061,
+        "n": 104,
+        "index": "MSCI World (EUR)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 1.9862,
+        "r2": 0.2249,
+        "n": 60,
+        "index": "MSCI World (EUR)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "booking": {
+      "local_w2y": {
+        "beta": 1.0305,
+        "r2": 0.2688,
+        "n": 104,
+        "index": "S&P 500",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 0.8854,
+        "r2": 0.2067,
+        "n": 60,
+        "index": "S&P 500",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 1.1226,
+        "r2": 0.269,
+        "n": 104,
+        "index": "MSCI World (USD)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 0.9906,
+        "r2": 0.234,
+        "n": 60,
+        "index": "MSCI World (USD)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "expedia": {
+      "local_w2y": {
+        "beta": 1.1766,
+        "r2": 0.1863,
+        "n": 104,
+        "index": "S&P 500",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 1.4881,
+        "r2": 0.2792,
+        "n": 60,
+        "index": "S&P 500",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 1.2283,
+        "r2": 0.1712,
+        "n": 104,
+        "index": "MSCI World (USD)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 1.5774,
+        "r2": 0.2837,
+        "n": 60,
+        "index": "MSCI World (USD)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    },
+    "edreams": {
+      "local_w2y": {
+        "beta": 1.5761,
+        "r2": 0.2,
+        "n": 104,
+        "index": "Madrid General Index",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "local_m5y": {
+        "beta": 1.5783,
+        "r2": 0.2072,
+        "n": 60,
+        "index": "Madrid General Index",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      },
+      "msci_w2y": {
+        "beta": 1.0909,
+        "r2": 0.0798,
+        "n": 104,
+        "index": "MSCI World (EUR)",
+        "start": "2024-11-22",
+        "end": "2026-11-20",
+        "frequency": "wöchentlich"
+      },
+      "msci_m5y": {
+        "beta": 1.2579,
+        "r2": 0.1287,
+        "n": 60,
+        "index": "MSCI World (EUR)",
+        "start": "2021-11-20",
+        "end": "2026-11-20",
+        "frequency": "monatlich"
+      }
+    }
+  }
 }
