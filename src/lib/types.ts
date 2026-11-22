@@ -12,6 +12,7 @@ export type Metric =
   | "marketing"
   | "marketing_margin"
   | "ebitda_adj"
+  | "ebitda"
   | "ebit"
   | "da";
 

@@ -143,3 +143,9 @@ table.data th.num {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+/* Grid and flex children must be allowed to shrink so wide tables scroll inside their card */
+.grid > *,
+main > * {
+  min-width: 0;
+}

@@ -9,7 +9,7 @@ const warnings = [];
 
 const LABELS = ["Berichtet", "Eigene Rechnung", "Annahme", "Automatisch erfasst"];
 const PERIODS = ["FY2023", "FY2024", "FY2025", "YTD", "YTD_PRIOR", "LTM"];
-const METRICS = ["revenue", "marketing", "marketing_margin", "ebitda_adj", "ebit", "da"];
+const METRICS = ["revenue", "marketing", "marketing_margin", "ebitda_adj", "ebitda", "ebit", "da"];
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 const FILINGS_CUTOFF = "2026-11-22";
 const PRICES_CUTOFF = "2026-11-20";

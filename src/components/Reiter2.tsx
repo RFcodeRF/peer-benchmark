@@ -109,7 +109,7 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
         </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3 items-start">
         <ResultCard title="Portal-Sicht" result={portal} rf={rf} mrp={mrp} premium={premium} de={de} sens={sensActive} />
         <ResultCard title="Reise-Sicht" result={travel} rf={rf} mrp={mrp} premium={premium} de={de} sens={sensActive} sub="Booking, Expedia, eDreams, trivago; feste Gruppe zum Vergleich" />
         <div className="card p-4 space-y-4">

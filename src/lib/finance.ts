@@ -130,9 +130,19 @@ export function buildSeries(peerId: string, allRows: FinancialRow[]): PeerSeries
       );
     }
 
+    const ebitdaRep = amount(get, p, "ebitda");
     const ebit = amount(get, p, "ebit");
     const da = amount(get, p, "da");
-    if (ebit && da) {
+    if (ebitdaRep) {
+      const label = combineLabels([...rev.rows, ...ebitdaRep.rows].map((r) => r.label), true);
+      s.ebitdaUnadjMargin[p] = point(
+        ebitdaRep.value / R,
+        srcFrom([...rev.rows, ...ebitdaRep.rows], label, "Berichtetes EBITDA ohne Bereinigungen ÷ Umsatz" + (rev.computedLtm ? "; LTM aus GJ 2025 + laufendes Jahr − Vorjahreszeitraum" : "")),
+        p,
+        rev.start,
+        rev.end,
+      );
+    } else if (ebit && da) {
       const label = combineLabels([...rev.rows, ...ebit.rows, ...da.rows].map((r) => r.label), true);
       s.ebitdaUnadjMargin[p] = point(
         (ebit.value + da.value) / R,

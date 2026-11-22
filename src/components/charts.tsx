@@ -97,12 +97,12 @@ export function DotStrip({ rows, periods, ariaLabel, medianLabel }: { rows: Stri
   const values = sorted.flatMap((r) => periods.map((p) => r.points[p]?.value).filter((v): v is number => v != null));
   const lo = Math.min(0, ...values);
   const hi = Math.max(0.1, ...values);
-  const step = hi - lo > 0.8 ? 0.2 : 0.1;
+  const narrow = width < 560;
+  const step = hi - lo > 0.8 || (narrow && hi - lo > 0.4) ? 0.2 : 0.1;
   const ticks = niceTicks(lo, hi + step * 0.5, step);
   const dMin = ticks[0];
   const dMax = ticks[ticks.length - 1];
 
-  const narrow = width < 560;
   const L = narrow ? 104 : 150;
   const R = narrow ? 52 : 64;
   const rowH = 30;
@@ -132,7 +132,7 @@ export function DotStrip({ rows, periods, ariaLabel, medianLabel }: { rows: Stri
           {med !== null && (
             <g>
               <line x1={sx(med)} x2={sx(med)} y1={top - 2} y2={H - 6} stroke="var(--text-2)" strokeDasharray="4 3" strokeWidth={1} />
-              <text x={sx(med) + 4} y={H - 8} fontSize={11} fill="var(--text-2)">
+              <text x={sx(med) > width * 0.55 ? sx(med) - 4 : sx(med) + 4} y={H - 8} fontSize={11} fill="var(--text-2)" textAnchor={sx(med) > width * 0.55 ? "end" : "start"}>
                 {medianLabel}: {pct(med)}
               </text>
             </g>
