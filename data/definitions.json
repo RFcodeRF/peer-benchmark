@@ -1,0 +1,114 @@
+{
+  "mony": {
+    "marketing": "Vom Unternehmen berichtete Marketingmarge: Umsatz minus gesamter Marketingaufwand, einschließlich TV, Performance-Marketing und Cashback, geteilt durch Umsatz.",
+    "marketingLabel": "Berichtet",
+    "ebitdaAdj": "Adjusted EBITDA laut MONY: EBITDA vor Sondereffekten.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Anhang.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "ctm": {
+    "marketing": "Nicht berichtet: Der Abschluss zeigt die Betriebsaufwendungen in einer Zeile.",
+    "marketingLabel": "Nicht berichtet",
+    "ebitdaAdj": "Keine Bereinigungen berichtet; die bereinigte Sicht entspricht der unbereinigten.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut Abschluss und Anhang.",
+    "revenueScope": "Umsatz der Compare the Market Limited",
+    "specialCases": ["Geschäftsjahr endet am 30. Juni."]
+  },
+  "gocompare": {
+    "marketing": "Rohertragsmarge: Laut Bilanzierungsgrundsatz enthalten die Umsatzkosten die Marketingkosten. Die Marge ist deshalb eine Annahme für die Marketingmarge.",
+    "marketingLabel": "Annahme",
+    "ebitdaAdj": "Keine Bereinigungen berichtet; die bereinigte Sicht entspricht der unbereinigten.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut Abschluss und Anhang.",
+    "revenueScope": "Umsatz der GoCompare.com Limited",
+    "specialCases": ["Geschäftsjahr endet am 30. September.", "GJ 2025 enthält eine einmalige Verschiebung konzerninterner Umlagen und eine Wertberichtigung von 5,7 Mio. GBP."]
+  },
+  "moltiply": {
+    "marketing": "Der Konzern-Marketingaufwand (172,8 Mio. EUR im GJ 2025) wird vollständig der Sparte Mavriq zugeordnet, weil die Vergleichsportale den Marketingaufwand tragen. Die Sparte selbst berichtet keine Marketingzahl.",
+    "marketingLabel": "Annahme",
+    "ebitdaAdj": "EBITDA der Sparte Mavriq laut Segmentbericht.",
+    "ebitdaUnadj": "Segment-EBITDA laut Segmentbericht; ein Segment-EBIT wird nicht getrennt berichtet.",
+    "revenueScope": "Umsatz der Sparte Mavriq (ohne BPO)",
+    "specialCases": ["Verivox ist seit März 2025 enthalten; GJ 2025 ist deshalb nur teilweise mit GJ 2024 vergleichbar."]
+  },
+  "trivago": {
+    "marketing": "Umsatz minus gesamte Werbeausgaben (Advertising Spend) laut Konzern-GuV. trivago berichtet den Return on Advertising Spend nur für die Kernsegmente.",
+    "marketingLabel": "Eigene Rechnung",
+    "ebitdaAdj": "Adjusted EBITDA laut trivago.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Anhang.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "skyscanner": {
+    "marketing": "Umsatz minus Zeile Marketing Expenses laut Abschluss der Skyscanner Limited. 2025 ohne die konzerninterne Plattformgebühr.",
+    "marketingLabel": "Eigene Rechnung",
+    "ebitdaAdj": "Keine Bereinigungen berichtet; EBITDA ohne Dividenden von Tochtergesellschaften.",
+    "ebitdaUnadj": "Betriebsergebnis ohne Dividenden von Tochtergesellschaften plus Abschreibungen.",
+    "revenueScope": "Umsatz der Skyscanner Limited",
+    "specialCases": ["Skyscanner Limited weist Dividenden aus Tochtergesellschaften im Betriebsergebnis aus. EBITDA nur für 2024 und früher, ohne diese Erträge; 2025 nicht vergleichbar."]
+  },
+  "hypoport": {
+    "marketing": "Nicht berichtet: Hypoport weist Provisionen und Lead-Kosten aus, aber keinen Marketingaufwand.",
+    "marketingLabel": "Nicht berichtet",
+    "ebitdaAdj": "EBITDA laut Hypoport; keine weiteren Bereinigungen.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "everquote": {
+    "marketing": "Variable Marketing Dollars (VMD): Umsatz minus Werbeaufwand. Marketingmarge = VMD ÷ Umsatz.",
+    "marketingLabel": "Berichtet",
+    "ebitdaAdj": "Adjusted EBITDA laut EverQuote: Jahresergebnis ohne aktienbasierte Vergütung, Abschreibungen, Zinsen, Steuern und weitere Sondereffekte.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Kapitalflussrechnung.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "lendingtree": {
+    "marketing": "Variable Marketing Margin: Umsatz minus variabler Werbe- und Direktmarketingaufwand, ohne fixe Marketingkosten und Personal.",
+    "marketingLabel": "Berichtet",
+    "ebitdaAdj": "Adjusted EBITDA laut LendingTree.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Kapitalflussrechnung.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": ["Goodwill-Abschreibung von 98,8 Mio. USD in Q3 2026; nur in der unbereinigten Sicht enthalten."]
+  },
+  "nerdwallet": {
+    "marketing": "Umsatz minus Performance-Marketing und Markenmarketing, wie von NerdWallet getrennt berichtet.",
+    "marketingLabel": "Eigene Rechnung",
+    "ebitdaAdj": "Adjusted EBITDA laut NerdWallet.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Kapitalflussrechnung.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "pbfintech": {
+    "marketing": "Umsatz minus Advertising and promotion expenses laut GuV.",
+    "marketingLabel": "Eigene Rechnung",
+    "ebitdaAdj": "Adjusted EBITDA laut PB Fintech (ohne ESOP-Aufwand und sonstige Erträge).",
+    "ebitdaUnadj": "Ergebnis vor Steuern, Zinsen und Abschreibungen laut GuV.",
+    "revenueScope": "Konzernumsatz (Revenue from operations)",
+    "specialCases": ["Geschäftsjahr endet am 31. März."]
+  },
+  "booking": {
+    "marketing": "Umsatz minus Marketing Expenses (Performance- und Markenmarketing) laut GuV.",
+    "marketingLabel": "Eigene Rechnung",
+    "ebitdaAdj": "Adjusted EBITDA laut Booking Holdings.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Kapitalflussrechnung.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "expedia": {
+    "marketing": "Umsatz minus Selling and Marketing direct (direkte Vertriebs- und Marketingkosten) laut Anhang.",
+    "marketingLabel": "Eigene Rechnung",
+    "ebitdaAdj": "Adjusted EBITDA laut Expedia.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Kapitalflussrechnung.",
+    "revenueScope": "Konzernumsatz",
+    "specialCases": []
+  },
+  "edreams": {
+    "marketing": "Revenue Margin minus variable Kosten. Die variablen Kosten enthalten neben Marketing auch Zahlungs- und Dienstleisterkosten; der Wert ist deshalb eine Untergrenze der Marketingmarge.",
+    "marketingLabel": "Annahme",
+    "ebitdaAdj": "Cash EBITDA laut eDreams ODIGEO.",
+    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV.",
+    "revenueScope": "Revenue Margin (Konzernumsatz)",
+    "specialCases": ["Geschäftsjahr endet am 31. März."]
+  }
+}

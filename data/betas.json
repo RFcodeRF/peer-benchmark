@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "status": "ausstehend",
+    "priceSource": "S&P Capital IQ, tägliche Schlusskurse, split-bereinigt, Landeswährung; Rohdaten nicht veröffentlicht",
+    "priceDate": "2026-11-20",
+    "computedAt": "",
+    "method": "Regression der Aktienrendite auf die Indexrendite (kleinste Quadrate). Wöchentlich: Freitags-Schlusskurse, 104 Wochen bis 20.11.2026. Monatlich: Monatsend-Schlusskurse, 60 Monate bis 20.11.2026."
+  },
+  "peers": {}
+}

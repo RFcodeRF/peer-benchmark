@@ -1,0 +1,37 @@
+{
+  "riskFree": {
+    "value": 0.0375,
+    "source": "Basiszinssatz nach IDW S 1 (Zinsstrukturkurve der Bundesbank), gerundet; ungerundet 3,80 %",
+    "url": "https://www.kleeberg.de/?p=41116",
+    "asOf": "2026-11-01",
+    "label": "Berichtet"
+  },
+  "mrp": {
+    "low": 0.045,
+    "high": 0.06,
+    "start": 0.0525,
+    "step": 0.0025,
+    "source": "Empfehlung des FAUB (IDW) vor persönlichen Steuern; Start in der Mitte der Bandbreite",
+    "url": "https://www.grantthornton.de/themen/2026/faub-senkt-empfehlung-zur-marktrisikopramie-erneut/",
+    "asOf": "2026-10-12",
+    "label": "Berichtet"
+  },
+  "targetTaxRate": {
+    "value": 0.30,
+    "source": "Rund 30 % für eine deutsche Kapitalgesellschaft (15 % Körperschaftsteuer, 5,5 % Solidaritätszuschlag darauf, Gewerbesteuer bei rund 400 % Hebesatz). Nur für Hamada.",
+    "label": "Annahme"
+  },
+  "matrix": { "betaMin": 0.6, "betaMax": 1.6, "betaStep": 0.1 },
+  "blume": { "weight": 0.67, "constant": 0.33, "source": "Blume (1975): angepasstes Beta = 0,67 × Rohbeta + 0,33" },
+  "minWeeks": 70,
+  "minMonths": 36,
+  "dataDates": { "prices": "2026-11-20", "filings": "2026-11-22" },
+  "taxSources": {
+    "GB": { "rate": 0.25, "source": "UK Corporation Tax Hauptsatz 25 % seit 01.04.2023", "label": "Berichtet" },
+    "US": { "rate": 0.21, "source": "US-Bundessteuersatz 21 %, ohne Steuern der Bundesstaaten", "label": "Annahme" },
+    "IT": { "rate": 0.279, "source": "IRES 24 % plus IRAP 3,9 %", "label": "Annahme" },
+    "DE": { "rate": 0.30, "source": "Rund 30 % (Körperschaftsteuer, Solidaritätszuschlag, Gewerbesteuer)", "label": "Annahme" },
+    "ES": { "rate": 0.25, "source": "Impuesto sobre Sociedades 25 %", "label": "Annahme" },
+    "IN": { "rate": 0.2517, "source": "Neues Regime nach Section 115BAA, inklusive Zuschläge", "label": "Annahme" }
+  }
+}

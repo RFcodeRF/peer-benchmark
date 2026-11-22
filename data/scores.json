@@ -1,0 +1,156 @@
+{
+  "mony": {
+    "k1": 1, "k2": 1, "k3": 1, "k4": 0.5,
+    "sentences": ["MONY ist ein reines Vergleichsportal mit Provisionserlösen in Versicherung, Geld, Energie und Reise.", "Einschränkung: Die Endkunden sitzen nur im britischen Markt."],
+    "rationale": {
+      "k1": "Vergleich ist das Kerngeschäft (MoneySuperMarket, MoneySavingExpert, Quidco).",
+      "k2": "Erlöse überwiegend aus Provisionen und Klicks der Anbieter.",
+      "k3": "Versicherung, Geld, Energie und Reise: vier der fünf Sparten.",
+      "k4": "Nur Vereinigtes Königreich, also ein anderes europäisches Land."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "ctm": {
+    "k1": 1, "k2": 1, "k3": 1, "k4": 0.5,
+    "sentences": ["Compare the Market ist ein reines Vergleichsportal mit Provisionserlösen in Versicherung, Energie und Finanzen.", "Einschränkung: Die Endkunden sitzen nur im britischen Markt, und der Abschluss zeigt keine Marketingzahl."],
+    "rationale": {
+      "k1": "Vergleich ist das Kerngeschäft der Gesellschaft.",
+      "k2": "Erlöse aus Provisionen der Anbieter.",
+      "k3": "Versicherung, Energie und Finanzen: drei der fünf Sparten.",
+      "k4": "Nur Vereinigtes Königreich."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "gocompare": {
+    "k1": 1, "k2": 1, "k3": 1, "k4": 0.5,
+    "sentences": ["GoCompare ist ein reines Vergleichsportal mit Provisionserlösen in Versicherung, Energie und Finanzen.", "Einschränkung: Die Endkunden sitzen nur im britischen Markt, und als Tochter der Future plc hat GoCompare keinen eigenen Kurs."],
+    "rationale": {
+      "k1": "Vergleich ist das Kerngeschäft der Gesellschaft.",
+      "k2": "Erlöse aus Provisionen der Anbieter.",
+      "k3": "Versicherung, Energie und Finanzen: drei der fünf Sparten.",
+      "k4": "Nur Vereinigtes Königreich."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "moltiply": {
+    "k1": 0.5, "k2": 0.5, "k3": 1, "k4": 1,
+    "sentences": ["Die Sparte Mavriq betreibt Vergleichsportale in mehreren EU-Ländern, mit Verivox auch in Deutschland, und deckt Versicherung, Finanzen, Energie und Telekommunikation ab.", "Einschränkung: Der Konzern erzielt einen großen Teil der Erlöse mit BPO-Dienstleistungen."],
+    "rationale": {
+      "k1": "Vergleich ist eine von zwei Sparten; die zweite ist BPO für Banken und Versicherer.",
+      "k2": "Gemischt: Provisionen in Mavriq, Dienstleistungsentgelte in der BPO-Sparte.",
+      "k3": "Versicherung, Finanzen, Energie und Telekommunikation.",
+      "k4": "Mehrere EU-Länder, darunter Italien, Deutschland und Spanien."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "trivago": {
+    "k1": 1, "k2": 1, "k3": 0.5, "k4": 0.5,
+    "sentences": ["trivago ist ein reiner Preisvergleich mit Erlösen pro Klick.", "Einschränkung: Abgedeckt ist nur die Sparte Reise, und die Endkunden sind global verteilt."],
+    "rationale": {
+      "k1": "Hotel-Preisvergleich ist das Kerngeschäft.",
+      "k2": "Erlöse überwiegend pro Klick (Referral Revenue).",
+      "k3": "Nur Reise.",
+      "k4": "Global gemischt, mit Schwerpunkt Europa und Amerika."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "skyscanner": {
+    "k1": 1, "k2": 1, "k3": 0.5, "k4": 0.5,
+    "sentences": ["Skyscanner ist ein reiner Preisvergleich für Flüge, Hotels und Mietwagen mit Erlösen pro Klick oder Buchung.", "Einschränkung: Abgedeckt ist nur die Sparte Reise, und die Endkunden sind global verteilt."],
+    "rationale": {
+      "k1": "Preisvergleich ist das Kerngeschäft.",
+      "k2": "Erlöse überwiegend pro Klick und Vermittlung.",
+      "k3": "Nur Reise.",
+      "k4": "Global gemischt."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "hypoport": {
+    "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 1,
+    "sentences": ["Hypoport vermittelt in Deutschland Baufinanzierungen und Versicherungen und verdient überwiegend Provisionen.", "Einschränkung: Kern sind B2B-Plattformen wie Europace; der Endkundenvergleich über Dr. Klein ist nur ein Teil."],
+    "rationale": {
+      "k1": "Vermittlung ja, aber vor allem als B2B-Plattform.",
+      "k2": "Erlöse überwiegend aus Provisionen und Transaktionsentgelten.",
+      "k3": "Finanzen und Versicherung: zwei der fünf Sparten.",
+      "k4": "Endkunden in Deutschland."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "everquote": {
+    "k1": 1, "k2": 1, "k3": 0.5, "k4": 0,
+    "sentences": ["EverQuote ist ein reiner Lead-Marktplatz mit Erlösen pro Lead oder Klick.", "Einschränkung: Die Endkunden sitzen in den USA, und abgedeckt ist nur Versicherung."],
+    "rationale": {
+      "k1": "Online-Marktplatz für Versicherungsanfragen ist das Kerngeschäft.",
+      "k2": "Erlöse pro Lead, Klick oder Anruf.",
+      "k3": "Nur Versicherung.",
+      "k4": "Endkunden in den USA."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "lendingtree": {
+    "k1": 1, "k2": 1, "k3": 0.5, "k4": 0,
+    "sentences": ["LendingTree ist ein reiner Marktplatz mit Lead-Erlösen in Versicherung und Krediten.", "Einschränkung: Die Endkunden sitzen in den USA."],
+    "rationale": {
+      "k1": "Marktplatz ist das Kerngeschäft.",
+      "k2": "Erlöse pro Lead oder Abschluss.",
+      "k3": "Versicherung und Finanzen: zwei der fünf Sparten.",
+      "k4": "Endkunden in den USA."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "nerdwallet": {
+    "k1": 1, "k2": 1, "k3": 0.5, "k4": 0,
+    "sentences": ["NerdWallet ist ein reiner Finanzvergleich mit Erlösen aus Vermittlung und Leads.", "Einschränkung: Die Endkunden sitzen fast nur in den USA."],
+    "rationale": {
+      "k1": "Finanzvergleich ist das Kerngeschäft.",
+      "k2": "Erlöse überwiegend aus Vermittlung und Leads.",
+      "k3": "Finanzen und Versicherung: zwei der fünf Sparten.",
+      "k4": "Endkunden fast nur in den USA, kleine Geschäfte in UK und Kanada."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "pbfintech": {
+    "k1": 1, "k2": 1, "k3": 0.5, "k4": 0,
+    "sentences": ["Policybazaar und Paisabazaar sind Vergleichsportale mit Provisionserlösen in Versicherung und Krediten.", "Einschränkung: Die Endkunden sitzen in Indien, einem Schwellenlandmarkt."],
+    "rationale": {
+      "k1": "Vergleich und Vermittlung sind das Kerngeschäft.",
+      "k2": "Erlöse überwiegend aus Provisionen.",
+      "k3": "Versicherung und Finanzen: zwei der fünf Sparten.",
+      "k4": "Endkunden in Indien."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "booking": {
+    "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0.5,
+    "sentences": ["Booking verdient überwiegend Provisionen aus der Vermittlung von Reisen; mit KAYAK gehört auch ein Preisvergleich dazu.", "Einschränkung: Kern ist ein Online-Reisebüro und kein Vergleichsportal, abgedeckt ist nur Reise."],
+    "rationale": {
+      "k1": "Vermittlung als Online-Reisebüro, also ein anderes Vermittlungsmodell.",
+      "k2": "Erlöse überwiegend aus Provisionen und Vermittlungsmargen.",
+      "k3": "Nur Reise.",
+      "k4": "Global gemischt, mit hohem Anteil Europa."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "expedia": {
+    "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0,
+    "sentences": ["Expedia vermittelt Reisen und verdient überwiegend an Provisionen und Margen je Buchung.", "Einschränkung: Die Endkunden sitzen überwiegend in den USA, abgedeckt ist nur Reise."],
+    "rationale": {
+      "k1": "Vermittlung als Online-Reisebüro, also ein anderes Vermittlungsmodell.",
+      "k2": "Erlöse überwiegend je Buchung.",
+      "k3": "Nur Reise.",
+      "k4": "Überwiegend Endkunden in den USA."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  },
+  "edreams": {
+    "k1": 0.5, "k2": 0.5, "k3": 0.5, "k4": 1,
+    "sentences": ["eDreams ODIGEO verkauft Reisen an Endkunden in mehreren EU-Ländern.", "Einschränkung: Das Abo-Modell Prime macht die Erlöse zu einer Mischung aus Abo und Vermittlung, abgedeckt ist nur Reise."],
+    "rationale": {
+      "k1": "Vermittlung als Online-Reisebüro, also ein anderes Vermittlungsmodell.",
+      "k2": "Gemischt: Abo-Erlöse aus Prime und Vermittlungsmargen.",
+      "k3": "Nur Reise.",
+      "k4": "Endkunden in mehreren EU-Ländern, vor allem Frankreich, Spanien, Italien und Deutschland."
+    },
+    "origin": "Eigene Einschätzung", "confirmed": false
+  }
+}

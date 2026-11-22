@@ -1,0 +1,100 @@
+{
+  "_hinweis": "Vorbereitete Einschätzungen für Unternehmen, die im Gespräch genannt werden könnten. Sie ersetzen den KI-Vorschlag, wenn kein Claude-Schlüssel hinterlegt ist. Stand 22.11.2026.",
+  "candidates": [
+    {
+      "id": "quinstreet", "name": "QuinStreet, Inc.", "aliases": ["quinstreet", "qnst"], "country": "USA",
+      "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0,
+      "sentences": ["QuinStreet verdient überwiegend an Leads und Klicks für Finanz- und Versicherungsanbieter.", "Einschränkung: QuinStreet ist vor allem Performance-Marketing-Dienstleister, die Endkunden sitzen in den USA."],
+      "rationale": { "k1": "Eigene Vergleichsseiten sind nur ein Teil, der Kern ist Performance-Marketing für Anbieter.", "k2": "Erlöse pro Lead, Klick oder Anruf.", "k3": "Finanzen und Versicherung; dazu Home Services außerhalb der fünf Sparten.", "k4": "Endkunden in den USA." }
+    },
+    {
+      "id": "scout24", "name": "Scout24 SE", "aliases": ["scout24", "immoscout", "immobilienscout24", "g24"], "country": "Deutschland",
+      "k1": 0.5, "k2": 0, "k3": 0, "k4": 1,
+      "sentences": ["Scout24 betreibt mit ImmoScout24 einen großen deutschen Online-Marktplatz.", "Einschränkung: Die Erlöse stammen überwiegend aus Abos von Maklern, und Immobilien gehören zu keiner der fünf Sparten."],
+      "rationale": { "k1": "Kleinanzeigen-Marktplatz, also ein anderes Vermittlungsmodell.", "k2": "Erlöse überwiegend aus Abos.", "k3": "Immobilien zählen zu keiner der fünf Sparten.", "k4": "Endkunden in Deutschland und Österreich." }
+    },
+    {
+      "id": "selectra", "name": "Selectra SAS", "aliases": ["selectra"], "country": "Frankreich",
+      "k1": 1, "k2": 1, "k3": 1, "k4": 1,
+      "sentences": ["Selectra ist ein Vergleichs- und Vermittlungsportal für Energie, Telekommunikation und Versicherung in mehreren EU-Ländern mit Provisionserlösen.", "Einschränkung: Selectra ist privat, Abschlüsse sind nur über das französische Register erhältlich und teils vertraulich."],
+      "rationale": { "k1": "Vergleich und Vermittlung sind das Kerngeschäft.", "k2": "Erlöse überwiegend aus Provisionen.", "k3": "Energie, Telekommunikation und Versicherung.", "k4": "Frankreich und weitere EU-Länder." }
+    },
+    {
+      "id": "mediaalpha", "name": "MediaAlpha, Inc.", "aliases": ["mediaalpha", "maxx"], "country": "USA",
+      "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0,
+      "sentences": ["MediaAlpha verdient an Klicks und Leads im Versicherungsvertrieb.", "Einschränkung: MediaAlpha ist eine B2B-Werbebörse, kein Vergleichsportal, mit Endkunden in den USA."],
+      "rationale": { "k1": "B2B-Plattform für Kundenakquise, also ein anderes Vermittlungsmodell.", "k2": "Erlöse pro Klick, Lead oder Anruf.", "k3": "Vor allem Versicherung.", "k4": "USA." }
+    },
+    {
+      "id": "selectquote", "name": "SelectQuote, Inc.", "aliases": ["selectquote", "slqt"], "country": "USA",
+      "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0,
+      "sentences": ["SelectQuote verdient Provisionen aus der Vermittlung von Versicherungen.", "Einschränkung: SelectQuote ist ein Makler mit Callcenter, kein Vergleichsportal, mit Endkunden in den USA."],
+      "rationale": { "k1": "Versicherungsmakler, also ein anderes Vermittlungsmodell.", "k2": "Erlöse überwiegend aus Provisionen.", "k3": "Nur Versicherung.", "k4": "USA." }
+    },
+    {
+      "id": "ehealth", "name": "eHealth, Inc.", "aliases": ["ehealth", "ehth"], "country": "USA",
+      "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0,
+      "sentences": ["eHealth verdient Provisionen aus der Vermittlung von Krankenversicherungen.", "Einschränkung: eHealth ist ein Online-Makler mit Endkunden in den USA und nur in einer Sparte."],
+      "rationale": { "k1": "Online-Makler, also ein anderes Vermittlungsmodell.", "k2": "Erlöse überwiegend aus Provisionen.", "k3": "Nur Versicherung.", "k4": "USA." }
+    },
+    {
+      "id": "rightmove", "name": "Rightmove plc", "aliases": ["rightmove", "rmv"], "country": "Vereinigtes Königreich",
+      "k1": 0.5, "k2": 0, "k3": 0, "k4": 0.5,
+      "sentences": ["Rightmove betreibt den größten britischen Immobilienmarktplatz.", "Einschränkung: Die Erlöse stammen aus Abos der Makler, und Immobilien gehören zu keiner der fünf Sparten."],
+      "rationale": { "k1": "Kleinanzeigen-Marktplatz.", "k2": "Erlöse überwiegend aus Abos.", "k3": "Keine der fünf Sparten.", "k4": "Vereinigtes Königreich." }
+    },
+    {
+      "id": "autotrader", "name": "Auto Trader Group plc", "aliases": ["auto trader", "autotrader"], "country": "Vereinigtes Königreich",
+      "k1": 0.5, "k2": 0, "k3": 0, "k4": 0.5,
+      "sentences": ["Auto Trader betreibt den größten britischen Automarktplatz.", "Einschränkung: Die Erlöse stammen aus Abos der Händler, und Autos gehören zu keiner der fünf Sparten."],
+      "rationale": { "k1": "Kleinanzeigen-Marktplatz.", "k2": "Erlöse überwiegend aus Abos.", "k3": "Keine der fünf Sparten.", "k4": "Vereinigtes Königreich." }
+    },
+    {
+      "id": "uswitch", "name": "RVU (Uswitch, Confused.com)", "aliases": ["uswitch", "rvu", "confused", "confused.com", "inspop"], "country": "Vereinigtes Königreich",
+      "k1": 1, "k2": 1, "k3": 1, "k4": 0.5,
+      "sentences": ["RVU betreibt mit Uswitch und Confused.com Vergleichsportale für Energie, Telekommunikation, Versicherung und Finanzen.", "Einschränkung: Die Abschlüsse zeigen keine Marketingzeile, und seit Juli 2025 liegt das Marketing in einer Schwestergesellschaft."],
+      "rationale": { "k1": "Vergleich ist das Kerngeschäft.", "k2": "Erlöse aus Provisionen.", "k3": "Energie, Telekommunikation, Versicherung und Finanzen.", "k4": "Vereinigtes Königreich." }
+    },
+    {
+      "id": "verivox", "name": "Verivox GmbH", "aliases": ["verivox"], "country": "Deutschland",
+      "k1": 1, "k2": 1, "k3": 1, "k4": 1,
+      "sentences": ["Verivox ist ein deutsches Mehrsparten-Vergleichsportal mit Provisionserlösen.", "Einschränkung: Verivox gehört seit 2025 zu Moltiply und ist dort Teil der Sparte Mavriq, also schon im Universum enthalten."],
+      "rationale": { "k1": "Vergleich ist das Kerngeschäft.", "k2": "Erlöse aus Provisionen.", "k3": "Energie, Telekommunikation, Versicherung und Finanzen.", "k4": "Deutschland." }
+    },
+    {
+      "id": "facile", "name": "Facile.it", "aliases": ["facile", "facile.it"], "country": "Italien",
+      "k1": 1, "k2": 1, "k3": 1, "k4": 1,
+      "sentences": ["Facile.it ist ein italienisches Mehrsparten-Vergleichsportal mit Provisionserlösen.", "Einschränkung: Facile.it gehört zu Moltiply und ist dort Teil der Sparte Mavriq, also schon im Universum enthalten."],
+      "rationale": { "k1": "Vergleich ist das Kerngeschäft.", "k2": "Erlöse aus Provisionen.", "k3": "Versicherung, Finanzen, Energie und Telekommunikation.", "k4": "Italien, ein EU-Land; über Moltiply mehrere EU-Länder." }
+    },
+    {
+      "id": "idealo", "name": "idealo internet GmbH", "aliases": ["idealo"], "country": "Deutschland",
+      "k1": 1, "k2": 1, "k3": 0.5, "k4": 1,
+      "sentences": ["idealo ist ein Preisvergleich mit Erlösen pro Klick und Endkunden in mehreren EU-Ländern.", "Einschränkung: Schwerpunkt ist Shopping; von den fünf Sparten sind nur Reise und Teile der Telekommunikation abgedeckt, und idealo berichtet nicht separat."],
+      "rationale": { "k1": "Preisvergleich ist das Kerngeschäft.", "k2": "Erlöse überwiegend pro Klick.", "k3": "Shopping zählt nicht; Reise und Mobilfunk teilweise.", "k4": "Deutschland und weitere EU-Länder." }
+    },
+    {
+      "id": "smava", "name": "smava GmbH", "aliases": ["smava", "finanzcheck"], "country": "Deutschland",
+      "k1": 1, "k2": 1, "k3": 0.5, "k4": 1,
+      "sentences": ["smava ist ein deutscher Kreditvergleich mit Provisionserlösen.", "Einschränkung: Abgedeckt ist vor allem die Sparte Finanzen, und smava ist privat."],
+      "rationale": { "k1": "Vergleich und Vermittlung sind das Kerngeschäft.", "k2": "Erlöse aus Provisionen.", "k3": "Vor allem Finanzen.", "k4": "Deutschland." }
+    },
+    {
+      "id": "lastminute", "name": "lastminute.com N.V.", "aliases": ["lastminute", "lastminute.com"], "country": "Schweiz/Niederlande",
+      "k1": 0.5, "k2": 0.5, "k3": 0.5, "k4": 1,
+      "sentences": ["lastminute.com verkauft Reisen an Endkunden in mehreren EU-Ländern.", "Einschränkung: Kern ist ein Online-Reisebüro mit gemischten Erlösen, abgedeckt ist nur Reise."],
+      "rationale": { "k1": "Online-Reisebüro, also ein anderes Vermittlungsmodell.", "k2": "Gemischt: Provisionen, Margen und Pauschalreisen.", "k3": "Nur Reise.", "k4": "Mehrere EU-Länder." }
+    },
+    {
+      "id": "tripcom", "name": "Trip.com Group Limited", "aliases": ["trip.com", "tripcom", "ctrip"], "country": "China",
+      "k1": 0.5, "k2": 1, "k3": 0.5, "k4": 0,
+      "sentences": ["Trip.com verdient überwiegend Provisionen aus der Vermittlung von Reisen und besitzt Skyscanner.", "Einschränkung: Die Endkunden sitzen überwiegend in China, abgedeckt ist nur Reise."],
+      "rationale": { "k1": "Online-Reisebüro.", "k2": "Erlöse überwiegend aus Provisionen.", "k3": "Nur Reise.", "k4": "Überwiegend China." }
+    },
+    {
+      "id": "check24", "name": "CHECK24", "aliases": ["check24", "check 24"], "country": "Deutschland",
+      "excluded": true,
+      "sentences": ["CHECK24 wird in diesem Projekt bewusst nicht bewertet.", "Das Dashboard vergleicht nur Peers und trifft keine Aussage über CHECK24 selbst."]
+    }
+  ]
+}
