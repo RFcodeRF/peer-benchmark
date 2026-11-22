@@ -1,0 +1,18 @@
+{
+  "_hinweis": "Zuordnung der privaten Capital-IQ-Dateien (Ordner außerhalb des Repos) zu Peers und Indizes. Dateiname = <Schlüssel>_prices.xlsx",
+  "cutoff": "2026-11-20",
+  "weeks": 104,
+  "months": 60,
+  "peers": {
+    "mony": { "stock": "MONY", "index": "FTSEALLSHARE", "indexName": "FTSE All-Share", "msci": "MSCIWORLD_GBP" },
+    "moltiply": { "stock": "MOL", "index": "FTSEITALIAALLSHARE", "indexName": "FTSE Italia All-Share", "msci": "MSCIWORLD_EUR" },
+    "everquote": { "stock": "EVER", "index": "SP500", "indexName": "S&P 500", "msci": "MSCIWORLD_USD" },
+    "lendingtree": { "stock": "TREE", "index": "SP500", "indexName": "S&P 500", "msci": "MSCIWORLD_USD" },
+    "nerdwallet": { "stock": "NRDS", "index": "SP500", "indexName": "S&P 500", "msci": "MSCIWORLD_USD" },
+    "trivago": { "stock": "TRVG", "index": "SP500", "indexName": "S&P 500", "msci": "MSCIWORLD_USD" },
+    "hypoport": { "stock": "HYQ", "index": "CDAX", "indexName": "CDAX", "msci": "MSCIWORLD_EUR" },
+    "booking": { "stock": "BKNG", "index": "SP500", "indexName": "S&P 500", "msci": "MSCIWORLD_USD" },
+    "expedia": { "stock": "EXPE", "index": "SP500", "indexName": "S&P 500", "msci": "MSCIWORLD_USD" },
+    "edreams": { "stock": "EDR", "index": "IGBM", "indexName": "Madrid General Index", "msci": "MSCIWORLD_EUR" }
+  }
+}
