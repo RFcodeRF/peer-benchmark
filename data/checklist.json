@@ -1,0 +1,17 @@
+[
+  { "nr": 1, "what": "EverQuote, Marketingmarge LTM (Okt. 2025 bis Sep. 2026)", "expected": "28,1 %", "check": "Prüfpaket Reiter 1; LTM = GJ 2025 + 9M 2026 − 9M 2025 aus Umsatz und Werbeaufwand" },
+  { "nr": 2, "what": "EverQuote, bereinigte EBITDA-Marge LTM", "expected": "15,0 %", "check": "Adjusted EBITDA 94,591 + 94,883 − 69,530 geteilt durch Umsatz 799,335 Mio. USD" },
+  { "nr": 3, "what": "MONY, Marketingmarge GJ 2025", "expected": "56,5 % (berichtet gerundet 57 %)", "check": "(446,3 − 194,0) ÷ 446,3" },
+  { "nr": 4, "what": "MONY, bereinigte EBITDA-Marge GJ 2025", "expected": "32,5 %", "check": "145,1 ÷ 446,3" },
+  { "nr": 5, "what": "LendingTree, Marketingmarge LTM", "expected": "28,7 %", "check": "Variable Marketing Margin LTM ÷ Umsatz LTM; berichtet Q3 2026: 28 %" },
+  { "nr": 6, "what": "NerdWallet, Marketingmarge GJ 2025", "expected": "30,1 %", "check": "(836,6 − 584,7) ÷ 836,6; Abgrenzung: gesamter Sales and marketing" },
+  { "nr": 7, "what": "trivago, Marketingmarge GJ 2025", "expected": "23,8 %", "check": "(548,9 − 418,2) ÷ 548,9" },
+  { "nr": 8, "what": "Compare the Market, EBITDA-Marge GJ 2025 (Juli 2024 bis Juni 2025)", "expected": "39,2 %", "check": "(224,6 + 6,5 + 4,8) ÷ 602,0" },
+  { "nr": 9, "what": "GoCompare, Marketingmarge GJ 2025 (Annahme)", "expected": "69,0 %", "check": "Rohertragsmarge (191,8 − 59,5) ÷ 191,8" },
+  { "nr": 10, "what": "MONY, verschuldetes Beta, 2 Jahre wöchentlich", "expected": "0,86", "check": "Private Excel-Datei PRIVAT_MONY_Beta_Nachrechnung.xlsx: SLOPE über 104 Wochenrenditen" },
+  { "nr": 11, "what": "MONY, FK/EK", "expected": "2,8 %", "check": "(66,6 − 18,6 − 18,5) ÷ 1.043,0 Mio. GBP" },
+  { "nr": 12, "what": "LendingTree, unverschuldetes Beta", "expected": "0,44", "check": "0,665 ÷ (1 + 0,506)" },
+  { "nr": 13, "what": "Portal-Sicht, Median unverschuldetes Beta (5 Peers)", "expected": "0,62", "check": "Median aus 0,84; 0,56; 0,62; 0,44; 0,95" },
+  { "nr": 14, "what": "Portal-Sicht, Eigenkapitalkosten Punktwert", "expected": "7,1 %", "check": "3,75 % + 0,617 × (1 + 0,028) × 5,25 %" },
+  { "nr": 15, "what": "Reise-Sicht, Eigenkapitalkosten Punktwert", "expected": "8,9 %", "check": "Median βu der vier Reise-Peers relevered mit 2,8 %, CAPM mit 3,75 % und 5,25 %" }
+]

@@ -1,6 +1,7 @@
 import { loadData } from "@/lib/data";
 import { deDate, pct } from "@/lib/format";
 import { CRITERIA } from "@/lib/score";
+import checklist from "../../../data/checklist.json";
 
 export const metadata = { title: "Methodik" };
 
@@ -163,6 +164,41 @@ export default function Methodik() {
         <p>
           Reiter 1 und Reiter 2 bieten je einen Download „Prüfpaket (CSV)“ mit jeder angezeigten Zahl, Label, Rechnung, Quelle und Stand. Die Datei öffnet direkt in Excel. Zwei Fälle sind in Excel nachgerechnet: EverQuote (Margen) und MONY (Beta bis Eigenkapitalkosten).
         </p>
+      </Section>
+
+      <Section title="Prüfliste: 15 Zahlen zum Nachrechnen">
+        <p className="mb-2">Stand der Standard-Gruppe mit Basiszins 3,75 %, Prämie 5,25 % und Ziel-FK/EK beim Median. Jede Zahl lässt sich mit dem Prüfpaket in Excel nachrechnen.</p>
+        <div className="scroll-x">
+          <table className="data min-w-[640px]">
+            <thead>
+              <tr>
+                <th className="num">Nr.</th>
+                <th>Zahl</th>
+                <th className="num">Erwartet</th>
+                <th>So prüfen</th>
+              </tr>
+            </thead>
+            <tbody>
+              {checklist.map((c) => (
+                <tr key={c.nr}>
+                  <td className="num">{c.nr}</td>
+                  <td>{c.what}</td>
+                  <td className="num">{c.expected}</td>
+                  <td className="text-xs">{c.check}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      <Section title="Build-Log">
+        <ul className="list-disc pl-5 space-y-1">
+          <li>22.11.2026: Briefing und PRD mit 27 Entscheidungen, Review von außen, Zeitplan bis 24.11.2026.</li>
+          <li>22.11.2026: App-Grundgerüst mit Rechenkern, Prüfskript und Tests; Live-Prüfung über SEC, filings.xbrl.org und Companies House.</li>
+          <li>22.11.2026: Kurse aus S&amp;P Capital IQ (Chart Builder) bis 20.11.2026, Betas lokal gerechnet; Excel-Nachrechnung für MONY stimmt mit SLOPE überein.</li>
+          <li>22.11.2026: Finanzzahlen aus Geschäftsberichten, 10-K, 10-Q, Ergebnismitteilungen und Companies House erfasst, jede Zeile mit Quelle, Stand und Label.</li>
+        </ul>
       </Section>
 
       <Section title="Technik">

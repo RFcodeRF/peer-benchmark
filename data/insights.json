@@ -1,17 +1,17 @@
 [
   {
-    "title": "Marke schlägt Einkauf",
-    "text": "Portale mit starker Marke und viel Direkt-Traffic behalten deutlich mehr vom Umsatz nach dem Marketing als US-Lead-Marktplätze, die Traffic einkaufen. Die Definition erklärt den Abstand nicht, denn MONY zieht sogar den gesamten Marketingaufwand ab.",
+    "title": "Marke schlägt Traffic-Einkauf",
+    "text": "MONY und Mavriq behalten nach dem Marketing rund 56 bis 58 % des Umsatzes, die US-Lead-Marktplätze EverQuote, LendingTree und NerdWallet nur rund 28 bis 29 % (letzte zwölf Monate). Die Definition erklärt den Abstand nicht: MONY zieht den gesamten Marketingaufwand ab, LendingTree nur den variablen.",
     "status": "Entwurf"
   },
   {
-    "title": "Definitionen zuerst lesen",
-    "text": "Jedes Unternehmen grenzt Marketing anders ab. Ein Vergleich der Marketingmarge ist nur zusammen mit der Definitionstabelle belastbar.",
+    "title": "Hohe Marketingmarge wird zu hoher EBITDA-Marge",
+    "text": "Wer weniger Traffic kaufen muss, verdient mehr: MONY erreicht rund 32 % bereinigte EBITDA-Marge, Compare the Market rund 39 % (unbereinigt), die US-Marktplätze 12 bis 16 %. Personal, Technik und Verwaltung kosten bei allen einen ähnlichen Anteil vom Umsatz.",
     "status": "Entwurf"
   },
   {
-    "title": "Hohe Marketingmarge wird nicht automatisch zu hoher EBITDA-Marge",
-    "text": "Zwischen Marketingmarge und EBITDA-Marge liegen Personal, Technik und Verwaltung. Die Punktwolke zeigt, welche Anbieter diesen Block klein halten.",
+    "title": "Die Messmethode bewegt die Eigenkapitalkosten um mehr als zwei Prozentpunkte",
+    "text": "Mit 2 Jahren wöchentlich ergeben sich für die Portal-Peers rund 7,1 %, mit 5 Jahren monatlich rund 9,5 %; die Reise-Peers liegen bei rund 8,9 %. Kleine, volatile Aktien haben wöchentlich ein sehr niedriges Bestimmtheitsmaß. Deshalb zeigt das Tool eine Spanne mit Sensitivitäten statt einer einzigen Zahl.",
     "status": "Entwurf"
   }
 ]
