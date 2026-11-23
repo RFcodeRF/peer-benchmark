@@ -32,18 +32,16 @@ export function Margen({
 
   const ebitdaKey = mode === "bereinigt" ? "ebitdaAdjMargin" : "ebitdaUnadjMargin";
 
-  const mmRows: StripRow[] = active.map(({ peer, series: s }) => ({
-    id: peer.id,
-    name: peer.shortName,
-    points: peer.tab1.scope === "nur EBITDA" ? {} : s?.marketingMargin ?? {},
-    emptyText: peer.live ? "live: kein Marketing erfasst" : "nicht berichtet",
-  }));
-  const ebRows: StripRow[] = active.map(({ peer, series: s }) => ({
-    id: peer.id,
-    name: peer.shortName,
-    points: s?.[ebitdaKey] ?? {},
-    emptyText: "nicht verfügbar",
-  }));
+  const inSelection = (pts: StripRow["points"], fallback: string) =>
+    Object.keys(pts).length > 0 && !shown.some((p) => pts[p]?.value != null) ? "kein Wert in der gewählten Periode" : fallback;
+  const mmRows: StripRow[] = active.map(({ peer, series: s }) => {
+    const points = peer.tab1.scope === "nur EBITDA" ? {} : s?.marketingMargin ?? {};
+    return { id: peer.id, name: peer.shortName, points, emptyText: inSelection(points, peer.live ? "live: kein Marketing erfasst" : "nicht berichtet") };
+  });
+  const ebRows: StripRow[] = active.map(({ peer, series: s }) => {
+    const points = s?.[ebitdaKey] ?? {};
+    return { id: peer.id, name: peer.shortName, points, emptyText: inSelection(points, "nicht verfügbar") };
+  });
 
   const scatter: ScatterPoint[] = active.flatMap(({ peer, series: s }) => {
     if (!s || peer.tab1.scope === "nur EBITDA") return [];
