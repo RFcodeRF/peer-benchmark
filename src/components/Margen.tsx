@@ -1,28 +1,28 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { DefinitionEntry, Insight, Peer, PeerSeries, PeriodKey } from "@/lib/types";
+import type { DefinitionEntry, Peer, PeerSeries, PeriodKey } from "@/lib/types";
 import { PERIODS } from "@/lib/types";
 import { pct } from "@/lib/format";
 import { useSelection } from "./SelectionProvider";
-import { DotStrip, PeriodLegend, Scatter, PERIOD_NAMES, type ScatterPoint, type StripRow } from "./charts";
-import { LabelBadge, Notice, PageIntro, SectionTitle, Segmented, SourceValue, downloadCsv } from "./ui";
+import { DotStrip, Scatter, PERIOD_COLORS, PERIOD_NAMES, type ScatterPoint, type StripRow } from "./charts";
+import { ChipSelect, LabelBadge, Notice, PageIntro, SectionTitle, Segmented, SourceValue, downloadCsv } from "./ui";
 
 type Mode = "bereinigt" | "unbereinigt";
 
-export function Reiter1({
+export function Margen({
   peers,
   series,
   definitions,
-  insights,
 }: {
   peers: Peer[];
   series: Record<string, PeerSeries>;
   definitions: Record<string, DefinitionEntry>;
-  insights: Insight[];
 }) {
   const sel = useSelection();
   const [mode, setMode] = useState<Mode>("bereinigt");
+  const [shown, setShown] = useState<PeriodKey[]>(PERIODS);
+  const lastShown = shown[shown.length - 1];
 
   const active = useMemo(() => {
     const base = peers.filter((p) => sel.tab1.includes(p.id)).map((p) => ({ peer: p, series: series[p.id] }));
@@ -35,8 +35,8 @@ export function Reiter1({
   const mmRows: StripRow[] = active.map(({ peer, series: s }) => ({
     id: peer.id,
     name: peer.shortName,
-    points: peer.live || peer.tab1.scope === "nur EBITDA" ? {} : s?.marketingMargin ?? {},
-    emptyText: peer.live ? "live: Definition ungeprüft" : "nicht berichtet",
+    points: peer.tab1.scope === "nur EBITDA" ? {} : s?.marketingMargin ?? {},
+    emptyText: peer.live ? "live: kein Marketing erfasst" : "nicht berichtet",
   }));
   const ebRows: StripRow[] = active.map(({ peer, series: s }) => ({
     id: peer.id,
@@ -46,8 +46,8 @@ export function Reiter1({
   }));
 
   const scatter: ScatterPoint[] = active.flatMap(({ peer, series: s }) => {
-    if (!s || peer.live || peer.tab1.scope === "nur EBITDA") return [];
-    for (const p of ["LTM", "FY2025", "FY2024", "FY2023"] as PeriodKey[]) {
+    if (!s || peer.tab1.scope === "nur EBITDA") return [];
+    for (const p of [...shown].reverse()) {
       const x = s.marketingMargin[p];
       const y = s[ebitdaKey][p];
       if (x?.value != null && y?.value != null) return [{ id: peer.id, name: peer.shortName, period: p, x, y }];
@@ -55,8 +55,9 @@ export function Reiter1({
     return [];
   });
 
-  const withMm = mmRows.filter((r) => Object.keys(r.points).length > 0).length;
-  const withEb = ebRows.filter((r) => Object.keys(r.points).length > 0).length;
+  const hasShown = (r: StripRow) => shown.some((p) => r.points[p]?.value != null);
+  const withMm = mmRows.filter(hasShown).length;
+  const withEb = ebRows.filter(hasShown).length;
   const noData = active.length > 0 && withMm === 0 && withEb === 0;
 
   function exportCsv() {
@@ -79,18 +80,18 @@ export function Reiter1({
         }
       }
     }
-    downloadCsv("pruefpaket-reiter1.csv", rows);
+    downloadCsv("pruefpaket-margen.csv", rows);
   }
 
   return (
     <div>
-      <PageIntro
-        title="Reiter 1: Marketingmarge und EBITDA-Marge"
-        question="Wie viel vom Umsatz bleibt einem Vergleichsportal nach dem Marketing, und warum unterscheiden sich die Anbieter so stark?"
-      >
-        <p className="mt-2 text-sm text-[var(--text-2)] max-w-3xl">
-          Marketingmarge = (Umsatz − Marketingaufwand) ÷ Umsatz, so wie jedes Unternehmen Marketing abgrenzt. Die Abgrenzungen unterscheiden sich; die Definitionstabelle unten gehört zu jeder Aussage. Zeitraum: Geschäftsjahre 2023 bis 2025 und die letzten verfügbaren zwölf Monate.
-        </p>
+      <PageIntro title="Marketingmarge und EBITDA-Marge" question="Wie viel vom Umsatz bleibt einem Vergleichsportal nach dem Marketing, und warum unterscheiden sich die Anbieter so stark?">
+        <div className="mt-3 card px-4 py-3 max-w-3xl text-sm">
+          <div className="font-bold">Marketingmarge = (Umsatz − Marketingaufwand) ÷ Umsatz</div>
+          <p className="mt-1 text-[var(--text-2)]">
+            Sie zeigt, wie viel von jedem Euro Umsatz nach dem Einkauf von Kunden (Werbung, Klicks, TV) übrig bleibt, um Personal, Technik und Gewinn zu bezahlen. Hoch heißt: Die Marke bringt Kunden direkt; niedrig heißt: Der Traffic wird teuer eingekauft.
+          </p>
+        </div>
       </PageIntro>
 
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -109,21 +110,29 @@ export function Reiter1({
               { value: "unbereinigt", label: "Unbereinigt" },
             ]}
           />
-          <button type="button" onClick={exportCsv} className="rounded-lg border border-[var(--line)] bg-white px-3 py-1.5 text-sm hover:border-[var(--blue)]">
+          <button type="button" onClick={exportCsv} className="btn-secondary px-3 py-1.5 text-sm">
             Prüfpaket (CSV)
           </button>
         </div>
       </div>
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <span className="text-sm text-[var(--text-2)]">Perioden anzeigen:</span>
+        <ChipSelect
+          label="Perioden anzeigen"
+          value={shown}
+          onChange={setShown}
+          options={PERIODS.map((p) => ({ value: p, label: PERIOD_NAMES[p], color: PERIOD_COLORS[p] }))}
+        />
+      </div>
 
-      {active.length === 0 && <Notice tone="warn">Kein Peer für Reiter 1 aktiv. Bitte auf der Seite Peer-Gruppe mindestens einen Peer einschalten.</Notice>}
+      {active.length === 0 && <Notice tone="warn">Kein Peer für die Margen aktiv. Bitte auf der Seite Peer-Gruppe mindestens einen Peer einschalten.</Notice>}
       {noData && <Notice tone="warn">Für die aktiven Peers sind noch keine Finanzzahlen hinterlegt.</Notice>}
 
       <div className="grid gap-4">
         <section className="card p-4">
-          <SectionTitle title="Marketingmarge je Peer" sub="Ein Punkt je Periode; sortiert nach dem jüngsten Wert. Weißer Kern = Annahme. Punkt anklicken für Quelle und Definition." />
-          <PeriodLegend periods={PERIODS} />
+          <SectionTitle title="Marketingmarge je Peer" sub={`Ein Punkt je Periode; sortiert nach dem jüngsten angezeigten Wert. Weißer Kern = Annahme. Punkt anklicken für Quelle und Definition.`} />
           <div className="mt-2">
-            <DotStrip rows={mmRows} periods={PERIODS} ariaLabel="Marketingmarge je Peer und Periode" medianLabel={`Median jüngster Wert, ${withMm} Peers`} />
+            <DotStrip rows={mmRows} periods={shown} ariaLabel="Marketingmarge je Peer und Periode" medianLabel={`Median jüngster Wert, ${withMm} Peers`} />
           </div>
         </section>
 
@@ -132,16 +141,15 @@ export function Reiter1({
             title={`EBITDA-Marge je Peer, ${mode}`}
             sub={mode === "bereinigt" ? "Bereinigtes EBITDA des Unternehmens ÷ Umsatz; die Bereinigungen stehen in der Definitionstabelle." : "(EBIT + Abschreibungen) ÷ Umsatz, gleiche Regel für alle."}
           />
-          <PeriodLegend periods={PERIODS} />
           <div className="mt-2">
-            <DotStrip rows={ebRows} periods={PERIODS} ariaLabel={`EBITDA-Marge ${mode} je Peer und Periode`} medianLabel={`Median jüngster Wert, ${withEb} Peers`} />
+            <DotStrip rows={ebRows} periods={shown} ariaLabel={`EBITDA-Marge ${mode} je Peer und Periode`} medianLabel={`Median jüngster Wert, ${withEb} Peers`} />
           </div>
         </section>
 
         <section className="card p-4">
           <SectionTitle
             title="Marketingmarge gegen EBITDA-Marge"
-            sub="Jüngste Periode mit beiden Werten je Peer. Gefüllt = letzte zwölf Monate, Ring = Geschäftsjahr. Der Abstand zwischen beiden Margen sind Personal, Technik und Verwaltung."
+            sub={`Jüngste angezeigte Periode mit beiden Werten je Peer (bis ${PERIOD_NAMES[lastShown]}). Gefüllt = letzte zwölf Monate, Ring = Geschäftsjahr. Der Abstand zwischen beiden Margen sind Personal, Technik und Verwaltung.`}
           />
           {scatter.length > 0 ? (
             <Scatter points={scatter} xLabel="Marketingmarge" yLabel={`EBITDA-Marge, ${mode}`} ariaLabel="Punktwolke Marketingmarge gegen EBITDA-Marge" />
@@ -151,34 +159,14 @@ export function Reiter1({
         </section>
 
         <section className="card p-4">
-          <SectionTitle title="Drei Erkenntnisse" />
-          {!sel.isDefault && (
-            <div className="mb-3">
-              <Notice>Die Erkenntnisse gelten für die Standard-Gruppe. Die aktuelle Auswahl weicht davon ab.</Notice>
-            </div>
-          )}
-          <div className="grid gap-3 md:grid-cols-3">
-            {insights.map((ins, i) => (
-              <div key={i} className="rounded-lg border border-[var(--line)] p-3">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="font-medium text-sm">{ins.title}</div>
-                  {ins.status === "Entwurf" && <LabelBadge label="Entwurf" />}
-                </div>
-                <p className="text-sm text-[var(--text-2)] mt-1">{ins.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="card p-4">
           <SectionTitle title="Alle Werte mit Quelle" sub="Tabellenansicht der Charts. Jede Zahl antippen: Quelle, Stand, Label und Rechnung." />
           <div className="scroll-x">
-            <table className="data min-w-[720px]">
+            <table className="data min-w-[560px]">
               <thead>
                 <tr>
                   <th>Peer</th>
                   <th>Kennzahl</th>
-                  {PERIODS.map((p) => (
+                  {shown.map((p) => (
                     <th key={p} className="num">
                       {PERIOD_NAMES[p]}
                     </th>
@@ -195,8 +183,8 @@ export function Reiter1({
                         </td>
                       )}
                       <td className="text-[var(--text-2)] whitespace-nowrap">{key === "marketingMargin" ? "Marketingmarge" : `EBITDA-Marge, ${mode}`}</td>
-                      {PERIODS.map((p) => {
-                        const pt = key === "marketingMargin" && (peer.live || peer.tab1.scope === "nur EBITDA") ? undefined : s?.[key]?.[p];
+                      {shown.map((p) => {
+                        const pt = key === "marketingMargin" && peer.tab1.scope === "nur EBITDA" ? undefined : s?.[key]?.[p];
                         return (
                           <td key={p} className="num">
                             {pt && pt.value != null ? (

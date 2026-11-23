@@ -12,11 +12,13 @@ const LABEL_STYLE: Record<string, string> = {
   "Nicht berichtet": "bg-white text-[#75736e] border-[#d3d8e2] border-dashed",
   "KI-Vorschlag": "bg-[#f1ecfb] text-[#4a3aa7] border-[#d6cdf3]",
   "Vorbereitete Einschätzung": "bg-[#eef0f4] text-[#2d3a4f] border-[#d3d8e2]",
+  Manuell: "bg-[#fff1e0] text-[#8a4600] border-[#f6c992]",
+  Entwurf: "bg-white text-[#75736e] border-[#d3d8e2]",
 };
 
 export function LabelBadge({ label }: { label: string }) {
   return (
-    <span className={`inline-flex items-center rounded border px-1.5 py-px text-[11px] font-medium leading-4 whitespace-nowrap ${LABEL_STYLE[label] ?? LABEL_STYLE["Eigene Rechnung"]}`}>
+    <span className={`inline-flex items-center rounded-[3px] border px-1.5 py-px text-[11px] font-medium leading-4 whitespace-nowrap ${LABEL_STYLE[label] ?? LABEL_STYLE["Eigene Rechnung"]}`}>
       {label}
     </span>
   );
@@ -29,7 +31,7 @@ export function Switch({ checked, onChange, label, disabled }: { checked: boolea
 export function SectionTitle({ title, sub }: { title: string; sub?: React.ReactNode }) {
   return (
     <div className="mb-3">
-      <h2 className="text-base font-semibold">{title}</h2>
+      <h2 className="text-base font-bold">{title}</h2>
       {sub && <p className="text-sm text-[var(--text-2)] mt-0.5">{sub}</p>}
     </div>
   );
@@ -38,7 +40,7 @@ export function SectionTitle({ title, sub }: { title: string; sub?: React.ReactN
 export function PageIntro({ title, question, children }: { title: string; question?: string; children?: React.ReactNode }) {
   return (
     <div className="mb-5">
-      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
       {question && (
         <p className="mt-2 text-[15px] text-[var(--text-2)] max-w-3xl">
           <span className="font-medium text-[var(--text)]">Leitfrage: </span>
@@ -51,10 +53,10 @@ export function PageIntro({ title, question, children }: { title: string; questi
 }
 
 export function Notice({ tone = "info", children }: { tone?: "info" | "warn"; children: React.ReactNode }) {
-  const cls = tone === "warn" ? "bg-[var(--warn-soft)] border-[#f3d98e]" : "bg-[var(--blue-soft)] border-[#b7d3f6]";
+  const cls = tone === "warn" ? "bg-[var(--warn-soft)] border-[#f3d98e]" : "bg-[var(--blue-soft)] border-[var(--blue-line)]";
   const icon = tone === "warn" ? "⚠" : "ℹ";
   return (
-    <div className={`flex gap-2 rounded-lg border px-3 py-2 text-sm ${cls}`} role={tone === "warn" ? "alert" : "note"}>
+    <div className={`flex gap-2 rounded-[3px] border px-3 py-2 text-sm ${cls}`} role={tone === "warn" ? "alert" : "note"}>
       <span aria-hidden className="font-semibold">{icon}</span>
       <div>{children}</div>
     </div>
@@ -143,7 +145,7 @@ export function useWidth<T extends HTMLElement>() {
 
 export function Segmented<T extends string>({ value, options, onChange, label }: { value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; label: string }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-lg border border-[var(--line)] bg-white p-0.5">
+    <div role="radiogroup" aria-label={label} className="inline-flex rounded-[3px] border border-[var(--line)] bg-white p-0.5">
       {options.map((o) => (
         <button
           key={o.value}
@@ -151,7 +153,7 @@ export function Segmented<T extends string>({ value, options, onChange, label }:
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`px-3 py-1.5 text-sm rounded-md ${value === o.value ? "bg-[var(--navy)] text-white" : "text-[var(--text-2)] hover:text-[var(--text)]"}`}
+          className={`px-3 py-1.5 text-sm rounded-[2px] ${value === o.value ? "bg-[var(--blue)] text-white font-bold" : "text-[var(--text-2)] hover:text-[var(--text)]"}`}
         >
           {o.label}
         </button>
@@ -177,4 +179,65 @@ export function downloadCsv(filename: string, rows: (string | number | null | un
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// Column header or label with a short explanation on hover, focus or tap.
+export function Tip({ label, tip, align = "left", className = "" }: { label: React.ReactNode; tip: React.ReactNode; align?: "left" | "right"; className?: string }) {
+  return (
+    <span className={`tip ${align === "right" ? "tip-right" : ""} ${className}`} tabIndex={0}>
+      <span className="tip-label">{label}</span>
+      <span role="tooltip" className="tip-box">
+        {tip}
+      </span>
+    </span>
+  );
+}
+
+export function scoreBand(total: number): "good" | "mid" | "low" {
+  return total >= 4 ? "good" : total >= 3 ? "mid" : "low";
+}
+
+// Score chip: green from 4, yellow from 3 to 3.5, light red below 3.
+export function ScoreBadge({ total, display }: { total: number; display: string }) {
+  const band = scoreBand(total);
+  const label = band === "good" ? "hohe Eignung" : band === "mid" ? "mittlere Eignung" : "geringe Eignung";
+  return (
+    <span
+      className="inline-flex min-w-[46px] justify-center rounded-[3px] px-2 py-1 text-[15px] font-bold tabular"
+      style={{ background: `var(--score-${band}-bg)`, color: `var(--score-${band}-fg)`, boxShadow: `inset 0 -3px 0 var(--score-${band}-bar)` }}
+      title={`Score ${display}: ${label}`}
+    >
+      {display}
+    </span>
+  );
+}
+
+// Multi-select chips (at least one stays selected).
+export function ChipSelect<T extends string>({ options, value, onChange, label }: { options: { value: T; label: string; color?: string }[]; value: T[]; onChange: (v: T[]) => void; label: string }) {
+  return (
+    <div role="group" aria-label={label} className="flex flex-wrap gap-1.5">
+      {options.map((o) => {
+        const on = value.includes(o.value);
+        return (
+          <button
+            key={o.value}
+            type="button"
+            aria-pressed={on}
+            onClick={() => {
+              if (on && value.length === 1) return;
+              onChange(on ? value.filter((v) => v !== o.value) : options.map((x) => x.value).filter((v) => v === o.value || value.includes(v)));
+            }}
+            className={`inline-flex items-center gap-1.5 rounded-[3px] border px-2.5 py-1 text-sm ${on ? "border-[var(--blue)] bg-[var(--blue-soft)] text-[var(--text)] font-bold" : "border-[var(--line)] bg-white text-[var(--text-3)]"}`}
+          >
+            {o.color && (
+              <svg width="10" height="10" aria-hidden>
+                <circle cx="5" cy="5" r="4.5" fill={on ? o.color : "#d0d0d6"} />
+              </svg>
+            )}
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 }

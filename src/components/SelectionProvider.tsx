@@ -21,7 +21,7 @@ interface SelectionApi extends SelectionState {
 }
 
 const Ctx = createContext<SelectionApi | null>(null);
-const KEY = "peer-benchmark-auswahl-v1";
+const KEY = "peer-benchmark-auswahl-v2";
 
 export function SelectionProvider({ defaults, children }: { defaults: { tab1: string[]; tab2: string[] }; children: React.ReactNode }) {
   const initial: SelectionState = { tab1: defaults.tab1, tab2: defaults.tab2, live: [] };

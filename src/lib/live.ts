@@ -449,20 +449,174 @@ export async function searchCompaniesHouse(q: string): Promise<SearchHit[]> {
   }));
 }
 
+// ---------- Companies House: digital accounts (iXBRL) ----------
+
+const CH_DOC = "https://document-api.company-information.service.gov.uk";
+
+interface IxFact {
+  name: string; // local name without prefix
+  start: string;
+  end: string;
+  value: number;
+}
+
+// Reads numeric facts from an inline XBRL document. Only facts with a plain
+// one-year period and no dimensions (segments) are kept.
+export function parseIxbrl(html: string): IxFact[] {
+  const ctx = new Map<string, { start: string; end: string } | null>();
+  const reCtx = /<(?:[\w-]+:)?context\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/(?:[\w-]+:)?context>/gi;
+  for (const m of html.matchAll(reCtx)) {
+    const body = m[2];
+    if (/<(?:[\w-]+:)?(segment|scenario)\b/i.test(body)) {
+      ctx.set(m[1], null);
+      continue;
+    }
+    const st = body.match(/<(?:[\w-]+:)?startDate>\s*(\d{4}-\d{2}-\d{2})/i);
+    const en = body.match(/<(?:[\w-]+:)?endDate>\s*(\d{4}-\d{2}-\d{2})/i);
+    ctx.set(m[1], st && en ? { start: st[1], end: en[1] } : null);
+  }
+  const out: IxFact[] = [];
+  const reFact = /<ix:nonFraction\b([^>]*?)(?<!\/)>([\s\S]*?)<\/ix:nonFraction>/gi;
+  for (const m of html.matchAll(reFact)) {
+    const attrs = m[1];
+    const get = (n: string) => attrs.match(new RegExp(`\\b${n}="([^"]*)"`, "i"))?.[1];
+    const name = get("name");
+    const c = ctx.get(get("contextRef") ?? "");
+    if (!name || !c) continue;
+    const len = days(c.start, c.end);
+    if (len < 350 || len > 380) continue;
+    const fmt = (get("format") ?? "").toLowerCase();
+    const txt = m[2].replace(/<[^>]+>/g, "").replace(/[\s\u00a0]/g, "");
+    let v: number;
+    if (/zero|nocontent/.test(fmt) || txt === "-" || txt === "–" || txt === "") v = 0;
+    else {
+      let t = txt.replace(/[()£$€]/g, "");
+      t = /comma-?decimal|numcommadecimal/.test(fmt) ? t.replace(/[.\s]/g, "").replace(",", ".") : t.replace(/,/g, "");
+      v = Number(t);
+      if (!Number.isFinite(v)) continue;
+    }
+    v *= Math.pow(10, Number(get("scale") ?? 0));
+    if (get("sign") === "-") v = -v;
+    out.push({ name: name.split(":").pop() as string, start: c.start, end: c.end, value: v });
+  }
+  return out;
+}
+
+const IX = {
+  revenue: [/^TurnoverRevenue$/, /^Revenue$/, /^RevenueFromContractsWithCustomers$/, /^TurnoverGrossOperatingRevenue$/, /^Turnover$/],
+  ebit: [/^OperatingProfitLoss$/, /^ProfitLossFromOperatingActivities$/],
+  da: [
+    /^DepreciationAmortisationImpairmentExpense$/,
+    /^DepreciationAmortisationExpense$/,
+    /^DepreciationAndAmortisationExpense$/,
+    /^DepreciationAmortisationAndImpairmentLoss/,
+    /^AdjustmentsForDepreciationAndAmortisationExpense/,
+  ],
+  dep: [/^DepreciationExpensePropertyPlantEquipment$/, /^DepreciationPropertyPlantEquipment$/, /^DepreciationTangibleFixedAssets$/, /^AdjustmentsForDepreciationExpense$/, /^DepreciationExpense$/],
+  rou: [/^DepreciationRightofuseAssets$/i, /^DepreciationRightOfUseAssets$/i],
+  amort: [/^AmortisationExpenseIntangibleAssets$/, /^AmortisationIntangibleAssets$/, /^AdjustmentsForAmortisationExpense$/, /^AmortisationExpense$/, /^AmortisationGoodwill$/],
+  marketing: [/^AdvertisingExpense$/, /^MarketingExpense$/, /^SellingDistributionCosts$/, /^DistributionCosts$/],
+};
+
+// For each period end: the first pattern (in priority order) that has a value.
+function ixPick(facts: IxFact[], patterns: RegExp[]) {
+  const byEnd = new Map<string, IxFact & { tag: string }>();
+  for (const re of patterns) {
+    for (const f of facts) if (re.test(f.name) && !byEnd.has(f.end)) byEnd.set(f.end, { ...f, tag: f.name });
+  }
+  return byEnd;
+}
+
+export function ixbrlPeriods(docs: string[]): { periods: LivePeriod[]; anyRevenue: boolean } {
+  const facts = docs.flatMap((d) => parseIxbrl(d)); // latest document first
+  const rev = ixPick(facts, IX.revenue);
+  const ebit = ixPick(facts, IX.ebit);
+  const da = ixPick(facts, IX.da);
+  const dep = ixPick(facts, IX.dep);
+  const rou = ixPick(facts, IX.rou);
+  const amort = ixPick(facts, IX.amort);
+  const mk = ixPick(facts, IX.marketing);
+  const periods: LivePeriod[] = [];
+  for (const r of Array.from(rev.values()).sort((a, b) => b.end.localeCompare(a.end))) {
+    const key = fyKey(r.start, r.end);
+    if (!key || periods.some((p) => p.key === key)) continue;
+    let daV: number | null = da.get(r.end) ? Math.abs(da.get(r.end)!.value) : null;
+    if (daV === null && (dep.get(r.end) || amort.get(r.end))) {
+      daV = Math.abs(dep.get(r.end)?.value ?? 0) + Math.abs(rou.get(r.end)?.value ?? 0) + Math.abs(amort.get(r.end)?.value ?? 0);
+    }
+    const m = mk.get(r.end);
+    periods.push({
+      key,
+      start: r.start,
+      end: r.end,
+      revenue: r.value / 1e6,
+      ebit: ebit.get(r.end) ? ebit.get(r.end)!.value / 1e6 : null,
+      da: daV !== null ? daV / 1e6 : null,
+      marketing: m ? { tag: m.tag, value: Math.abs(m.value) / 1e6 } : null,
+    });
+  }
+  periods.sort((a, b) => a.key.localeCompare(b.key));
+  return { periods, anyRevenue: rev.size > 0 };
+}
+
+async function chIxbrlDocument(metaUrl: string, auth: Record<string, string>): Promise<string | null> {
+  const id = metaUrl.split("/document/")[1]?.split(/[/?#]/)[0];
+  if (!id) return null;
+  const meta = await getJson<{ resources?: Record<string, unknown> }>(`${CH_DOC}/document/${id}`, auth);
+  if (!meta.resources || !("application/xhtml+xml" in meta.resources)) return null;
+  const res = await fetch(`${CH_DOC}/document/${id}/content`, {
+    headers: { ...auth, Accept: "application/xhtml+xml", "User-Agent": ua() },
+    redirect: "manual",
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+    cache: "no-store",
+  });
+  let body = res;
+  if (res.status >= 300 && res.status < 400) {
+    const loc = res.headers.get("location");
+    if (!loc) return null;
+    // The content lives behind a pre-signed link; it must be fetched without the API key.
+    body = await fetch(loc, { signal: AbortSignal.timeout(TIMEOUT_MS), cache: "no-store" });
+  }
+  if (!body.ok) return null;
+  return await body.text();
+}
+
 export async function checkCompaniesHouse(number: string): Promise<CheckResult> {
   const auth = chAuth();
   if (!auth) throw new Error("Companies House ist nicht eingerichtet");
+  type Filing = {
+    date: string;
+    type: string;
+    description: string;
+    transaction_id?: string;
+    links?: { document_metadata?: string };
+    description_values?: { made_up_date?: string };
+  };
   const [profile, filings] = await Promise.all([
     getJson<{ company_name: string; company_status: string; type: string; sic_codes?: string[] }>(`${CH}/company/${number}`, auth),
-    getJson<{ items?: { date: string; type: string; description: string; links?: { document_metadata?: string }; description_values?: { made_up_date?: string } }[] }>(
-      `${CH}/company/${number}/filing-history?category=accounts&items_per_page=10`,
-      auth,
-    ),
+    getJson<{ items?: Filing[] }>(`${CH}/company/${number}/filing-history?category=accounts&items_per_page=15`, auth),
   ]);
   const accounts = (filings.items ?? []).filter((f) => f.type === "AA" && f.date <= "2026-11-22").slice(0, 4);
   const page = `https://find-and-update.company-information.service.gov.uk/company/${number}/filing-history`;
+  const docUrl = (f: Filing) => (f.transaction_id ? `${page}/${f.transaction_id}/document?format=pdf&download=0` : page);
   const enough = accounts.length >= 2;
   const isPlc = profile.type === "plc";
+
+  // Digital accounts: the latest two cover three fiscal years (each has the prior year as comparative).
+  const messages: string[] = [];
+  let periods: LivePeriod[] = [];
+  const withMeta = accounts.filter((f) => f.links?.document_metadata).slice(0, 2);
+  const docs = (await Promise.allSettled(withMeta.map((f) => chIxbrlDocument(f.links!.document_metadata!, auth)))).map((r) => (r.status === "fulfilled" ? r.value : null));
+  const ix = docs.filter((d): d is string => Boolean(d));
+  if (ix.length) {
+    const res = ixbrlPeriods(ix);
+    periods = res.periods;
+    if (!res.anyRevenue) messages.push("Digitaler Abschluss ohne Umsatzzeile (z. B. Kleinstunternehmen ohne Gewinn- und Verlustrechnung). Zahlen bitte unten manuell eintragen.");
+    else if (periods.every((p) => p.ebit === null || p.da === null)) messages.push("Betriebsergebnis oder Abschreibungen im digitalen Abschluss nicht gefunden; EBITDA-Marge daher nicht automatisch berechenbar. Fehlende Zahlen unten manuell eintragen.");
+  } else if (accounts.length) {
+    messages.push("Die Abschlüsse liegen nur als PDF vor (meist ein Scan). Die App kann sie verlinken, aber nicht zuverlässig auswerten. Zahlen bitte aus dem verlinkten PDF unten manuell eintragen.");
+  }
+
   return {
     name: profile.company_name,
     source: "Companies House",
@@ -472,14 +626,18 @@ export async function checkCompaniesHouse(number: string): Promise<CheckResult> 
     exchange: null,
     ticker: null,
     currency: "GBP",
-    annualReports: accounts.map((a) => ({ year: (a.description_values?.made_up_date ?? a.date).slice(0, 4), form: "Abschluss (AA)", url: page })),
+    annualReports: accounts.map((a) => ({ year: (a.description_values?.made_up_date ?? a.date).slice(0, 4), form: "Abschluss", url: docUrl(a) })),
     tab1: enough
-      ? { eligible: true, reason: `${accounts.length} Abschlüsse bei Companies House gefunden; Zahlen manuell prüfen`, scope: "nur EBITDA" }
+      ? {
+          eligible: true,
+          reason: `${accounts.length} Abschlüsse bei Companies House gefunden; ${periods.length ? "Zahlen aus dem digitalen Abschluss (iXBRL) gelesen" : "Zahlen manuell eintragen"}`,
+          scope: "nur EBITDA",
+        }
       : { eligible: false, reason: "Weniger als zwei Abschlüsse bei Companies House", scope: "nur EBITDA" },
     tab2: { eligible: false, reason: isPlc ? "plc: Börsennotierung nicht automatisch prüfbar; Beta nicht live verfügbar" : "Nicht börsennotiert (Limited)" },
-    periods: [],
+    periods,
     description: "",
     sic: (profile.sic_codes ?? []).join(", "),
-    messages: ["Abschlüsse liegen meist als PDF oder iXBRL vor; die Zahlen werden nicht automatisch übernommen."],
+    messages,
   };
 }

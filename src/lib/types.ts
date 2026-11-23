@@ -1,6 +1,6 @@
 // Shared types for data files and calculations.
 
-export type Label = "Berichtet" | "Eigene Rechnung" | "Annahme" | "Automatisch erfasst";
+export type Label = "Berichtet" | "Eigene Rechnung" | "Annahme" | "Automatisch erfasst" | "Manuell";
 
 export type PeriodKey = "FY2023" | "FY2024" | "FY2025" | "LTM";
 export const PERIODS: PeriodKey[] = ["FY2023", "FY2024", "FY2025", "LTM"];

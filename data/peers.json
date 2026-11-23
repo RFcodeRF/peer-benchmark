@@ -13,9 +13,20 @@
     "currency": "GBP",
     "fyEnd": "Dezember",
     "cadence": "Halbjahr",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Marketingmarge und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": false, "reason": "Börsennotiert" },
-    "defaultOn": { "tab1": true, "tab2": true },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Marketingmarge und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": false,
+      "reason": "Börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": true
+    },
     "betaQuality": "Eine Einschränkung",
     "betaNote": "Moltiply hält rund 11 % der Stimmrechte (TR-1-Meldung, April 2026). Der Beteiligungsaufbau 2026 kann den Kursverlauf beeinflussen.",
     "taxRate": 0.25,
@@ -31,13 +42,26 @@
     "listed": false,
     "exchange": null,
     "ticker": null,
-    "identifiers": { "companiesHouse": "10636682" },
+    "identifiers": {
+      "companiesHouse": "10636682"
+    },
     "currency": "GBP",
     "fyEnd": "Juni",
     "cadence": "Jahr",
-    "tab1": { "eligible": true, "scope": "nur EBITDA", "reason": "Abschluss bei Companies House; Marketingkosten nicht separat berichtet" },
-    "tab2": { "eligible": false, "travel": false, "reason": "Nicht börsennotiert, kein Kurs für ein Beta" },
-    "defaultOn": { "tab1": true, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "nur EBITDA",
+      "reason": "Abschluss bei Companies House; Marketingkosten nicht separat berichtet"
+    },
+    "tab2": {
+      "eligible": false,
+      "travel": false,
+      "reason": "Nicht börsennotiert, kein Kurs für ein Beta"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": false
+    },
     "betaQuality": "Nicht börsennotiert",
     "betaNote": "Kein Beta: Tochter der privaten BGL Group.",
     "taxRate": 0.25,
@@ -53,13 +77,26 @@
     "listed": false,
     "exchange": null,
     "ticker": null,
-    "identifiers": { "companiesHouse": "05799376" },
+    "identifiers": {
+      "companiesHouse": "05799376"
+    },
     "currency": "GBP",
     "fyEnd": "September",
     "cadence": "Jahr",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Abschluss bei Companies House; Marketing über die Umsatzkosten (Annahme)" },
-    "tab2": { "eligible": false, "travel": false, "reason": "Nicht eigenständig börsennotiert; die Mutter Future plc ist vor allem ein Medienhaus" },
-    "defaultOn": { "tab1": true, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Abschluss bei Companies House; Marketing über die Umsatzkosten (Annahme)"
+    },
+    "tab2": {
+      "eligible": false,
+      "travel": false,
+      "reason": "Nicht eigenständig börsennotiert; die Mutter Future plc ist vor allem ein Medienhaus"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": false
+    },
     "betaQuality": "Nicht börsennotiert",
     "betaNote": "Kein Beta: Tochter der Future plc.",
     "taxRate": 0.25,
@@ -79,9 +116,20 @@
     "currency": "EUR",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Umsatz und EBITDA der Sparte Mavriq berichtet; Marketing nur auf Konzernebene (Annahme)" },
-    "tab2": { "eligible": true, "travel": false, "reason": "Börsennotiert" },
-    "defaultOn": { "tab1": true, "tab2": true },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Umsatz und EBITDA der Sparte Mavriq berichtet; Marketing nur auf Konzernebene (Annahme)"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": false,
+      "reason": "Börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": true
+    },
     "betaQuality": "Mehrere Einschränkungen",
     "betaNote": "Das Beta enthält die BPO-Sparte und die Beteiligung an MONY (rund 11 %). Der Verivox-Kauf im März 2025 liegt im Zwei-Jahres-Fenster.",
     "taxRate": 0.279,
@@ -101,12 +149,23 @@
     "currency": "EUR",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Werbeausgaben und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": true, "reason": "Börsennotiert; Teil der Reise-Sicht" },
-    "defaultOn": { "tab1": true, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Werbeausgaben und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": true,
+      "reason": "Börsennotiert; Teil der Reise-Sicht"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": false
+    },
     "betaQuality": "Eine Einschränkung",
     "betaNote": "Expedia ist Mehrheitsaktionär, der Streubesitz ist klein.",
-    "taxRate": 0.30,
+    "taxRate": 0.3,
     "index": "S&P 500"
   },
   {
@@ -119,13 +178,26 @@
     "listed": false,
     "exchange": null,
     "ticker": null,
-    "identifiers": { "companiesHouse": "04217916" },
+    "identifiers": {
+      "companiesHouse": "04217916"
+    },
     "currency": "GBP",
     "fyEnd": "Dezember",
     "cadence": "Jahr",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Abschluss bei Companies House mit Zeile Marketing Expenses" },
-    "tab2": { "eligible": false, "travel": false, "reason": "Nicht börsennotiert" },
-    "defaultOn": { "tab1": true, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Abschluss bei Companies House mit Zeile Marketing Expenses"
+    },
+    "tab2": {
+      "eligible": false,
+      "travel": false,
+      "reason": "Nicht börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": false
+    },
     "betaQuality": "Nicht börsennotiert",
     "betaNote": "Kein Beta: Tochter der Trip.com Group.",
     "taxRate": 0.25,
@@ -145,12 +217,23 @@
     "currency": "EUR",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "nur EBITDA", "reason": "Marketingkosten nicht separat berichtet" },
-    "tab2": { "eligible": true, "travel": false, "reason": "Börsennotiert" },
-    "defaultOn": { "tab1": false, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "nur EBITDA",
+      "reason": "Marketingkosten nicht separat berichtet"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": false,
+      "reason": "Börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": false,
+      "tab2": true
+    },
     "betaQuality": "Ohne Einschränkung",
-    "betaNote": "Liquide, kein beherrschender Aktionär.",
-    "taxRate": 0.30,
+    "betaNote": "Liquide, kein beherrschender Aktionär. Kern ist das B2B-Geschäft Europace; das Beta spiegelt auch den deutschen Baufinanzierungszyklus.",
+    "taxRate": 0.3,
     "index": "CDAX"
   },
   {
@@ -163,13 +246,26 @@
     "listed": true,
     "exchange": "Nasdaq",
     "ticker": "EVER",
-    "identifiers": { "cik": "0001640428" },
+    "identifiers": {
+      "cik": "0001640428"
+    },
     "currency": "USD",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Variable Marketing Dollars und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": false, "reason": "Börsennotiert" },
-    "defaultOn": { "tab1": true, "tab2": true },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Variable Marketing Dollars und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": false,
+      "reason": "Börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": true
+    },
     "betaQuality": "Ohne Einschränkung",
     "betaNote": "Liquide, kein beherrschender Aktionär.",
     "taxRate": 0.21,
@@ -185,13 +281,26 @@
     "listed": true,
     "exchange": "Nasdaq",
     "ticker": "TREE",
-    "identifiers": { "cik": "0001434621" },
+    "identifiers": {
+      "cik": "0001434621"
+    },
     "currency": "USD",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Variable Marketing Margin und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": false, "reason": "Börsennotiert" },
-    "defaultOn": { "tab1": true, "tab2": true },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Variable Marketing Margin und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": false,
+      "reason": "Börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": true
+    },
     "betaQuality": "Eine Einschränkung",
     "betaNote": "Hohe Verschuldung, daher großer Abstand zwischen verschuldetem und unverschuldetem Beta.",
     "taxRate": 0.21,
@@ -207,13 +316,26 @@
     "listed": true,
     "exchange": "Nasdaq",
     "ticker": "NRDS",
-    "identifiers": { "cik": "0001625278" },
+    "identifiers": {
+      "cik": "0001625278"
+    },
     "currency": "USD",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Performance- und Markenmarketing und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": false, "reason": "Börsennotiert" },
-    "defaultOn": { "tab1": true, "tab2": true },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Performance- und Markenmarketing und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": false,
+      "reason": "Börsennotiert"
+    },
+    "defaultOn": {
+      "tab1": true,
+      "tab2": true
+    },
     "betaQuality": "Ohne Einschränkung",
     "betaNote": "Liquide, kein beherrschender Aktionär.",
     "taxRate": 0.21,
@@ -233,9 +355,20 @@
     "currency": "INR",
     "fyEnd": "März",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz und Advertising and promotion expenses" },
-    "tab2": { "eligible": false, "travel": false, "reason": "Schwellenlandmarkt: Beta und Länderrisiko passen nicht zu einem deutschen CAPM" },
-    "defaultOn": { "tab1": false, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz und Advertising and promotion expenses"
+    },
+    "tab2": {
+      "eligible": false,
+      "travel": false,
+      "reason": "Schwellenlandmarkt: Beta und Länderrisiko passen nicht zu einem deutschen CAPM"
+    },
+    "defaultOn": {
+      "tab1": false,
+      "tab2": false
+    },
     "betaQuality": "Eine Einschränkung",
     "betaNote": "Schwellenlandmarkt; nicht in Reiter 2.",
     "taxRate": 0.2517,
@@ -251,13 +384,26 @@
     "listed": true,
     "exchange": "Nasdaq",
     "ticker": "BKNG",
-    "identifiers": { "cik": "0001075531" },
+    "identifiers": {
+      "cik": "0001075531"
+    },
     "currency": "USD",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Marketing Expenses und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": true, "reason": "Börsennotiert; Teil der Reise-Sicht" },
-    "defaultOn": { "tab1": false, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Marketing Expenses und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": true,
+      "reason": "Börsennotiert; Teil der Reise-Sicht"
+    },
+    "defaultOn": {
+      "tab1": false,
+      "tab2": false
+    },
     "betaQuality": "Ohne Einschränkung",
     "betaNote": "Liquide, kein beherrschender Aktionär.",
     "taxRate": 0.21,
@@ -273,13 +419,26 @@
     "listed": true,
     "exchange": "Nasdaq",
     "ticker": "EXPE",
-    "identifiers": { "cik": "0001324424" },
+    "identifiers": {
+      "cik": "0001324424"
+    },
     "currency": "USD",
     "fyEnd": "Dezember",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Berichtet Umsatz, Selling and Marketing direct und bereinigtes EBITDA" },
-    "tab2": { "eligible": true, "travel": true, "reason": "Börsennotiert; Teil der Reise-Sicht" },
-    "defaultOn": { "tab1": false, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Berichtet Umsatz, Selling and Marketing direct und bereinigtes EBITDA"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": true,
+      "reason": "Börsennotiert; Teil der Reise-Sicht"
+    },
+    "defaultOn": {
+      "tab1": false,
+      "tab2": false
+    },
     "betaQuality": "Ohne Einschränkung",
     "betaNote": "Liquide, kein beherrschender Aktionär.",
     "taxRate": 0.21,
@@ -299,9 +458,20 @@
     "currency": "EUR",
     "fyEnd": "März",
     "cadence": "Quartal",
-    "tab1": { "eligible": true, "scope": "voll", "reason": "Marketing nur gebündelt in den variablen Kosten (Annahme)" },
-    "tab2": { "eligible": true, "travel": true, "reason": "Börsennotiert; Teil der Reise-Sicht" },
-    "defaultOn": { "tab1": false, "tab2": false },
+    "tab1": {
+      "eligible": true,
+      "scope": "voll",
+      "reason": "Marketing nur gebündelt in den variablen Kosten (Annahme)"
+    },
+    "tab2": {
+      "eligible": true,
+      "travel": true,
+      "reason": "Börsennotiert; Teil der Reise-Sicht"
+    },
+    "defaultOn": {
+      "tab1": false,
+      "tab2": false
+    },
     "betaQuality": "Eine Einschränkung",
     "betaNote": "Verschuldung und geringere Liquidität der Aktie.",
     "taxRate": 0.25,

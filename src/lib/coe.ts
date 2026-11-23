@@ -1,4 +1,4 @@
-// Cost of equity calculations (Reiter 2).
+// Cost of equity calculations.
 // All rates are decimals (0.0375 = 3,75 %).
 
 import type { BetaEstimate, BetaFile, CapitalStructureRow, Peer } from "./types";

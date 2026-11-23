@@ -1,4 +1,4 @@
-// Margin calculations for Reiter 1.
+// Margin calculations.
 import type { FinancialRow, Label, MetricPoint, PeerSeries, PeriodKey, RawPeriod, SourceInfo } from "./types";
 import { PERIODS } from "./types";
 

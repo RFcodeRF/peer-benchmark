@@ -1,27 +1,46 @@
 @import "tailwindcss";
 
+/* Classic comparison-portal look: deep blue header, light grey page, white boxes
+   with small radii, blue actions and a yellow accent. Colours taken from the
+   public CHECK24 site (archive, August 2025); no logo or brand marks are used. */
 :root {
   color-scheme: light;
-  --navy: #0b2a5b;
-  --navy-2: #123b7a;
-  --blue: #2a78d6;
-  --blue-dark: #1c5cab;
-  --blue-soft: #e8f1fc;
-  --page: #f3f5f9;
+  --navy: #022d94; /* header band */
+  --navy-2: #01226f;
+  --blue: #0563c1; /* actions, links, switches */
+  --blue-dark: #0563c1;
+  --blue-hover: #044f9a;
+  --blue-soft: #ecf7fd;
+  --blue-line: #b9dcf3;
+  --yellow: #ffbb1c;
+  --orange: #f07c00;
+  --page: #efeff4;
   --card: #ffffff;
-  --line: #e2e6ee;
-  --grid: #eceff4;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --text-3: #75736e;
-  --warn: #fab219;
-  --warn-soft: #fff6df;
-  --crit: #d03b3b;
-  --good: #0ca30c;
-  --seq-1: #86b6ef;
-  --seq-2: #3987e5;
-  --seq-3: #1c5cab;
-  --seq-4: #0d366b;
+  --line: #dcdce2;
+  --grid: #ececf1;
+  --head: #f5f5f8;
+  --text: #181818;
+  --text-2: #555555;
+  --text-3: #767676;
+  --warn: #ffbb1c;
+  --warn-soft: #fff7e0;
+  --crit: #c62828;
+  --good: #2e7d0e;
+  /* sequential blue ramp for periods, light (old) to dark (recent) */
+  --seq-1: #a8cbf0;
+  --seq-2: #5b9ce0;
+  --seq-3: #0563c1;
+  --seq-4: #022d94;
+  /* score bands */
+  --score-good-bg: #e6f4da;
+  --score-good-fg: #2b6a0c;
+  --score-good-bar: #5aa51e;
+  --score-mid-bg: #fff4cc;
+  --score-mid-fg: #6b4f00;
+  --score-mid-bar: #ffbb1c;
+  --score-low-bg: #fde7e5;
+  --score-low-fg: #9c2a22;
+  --score-low-bar: #e8857c;
 }
 
 @theme inline {
@@ -32,8 +51,7 @@
   --color-ink: var(--text);
   --color-ink-2: var(--text-2);
   --color-ink-3: var(--text-3);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 html,
@@ -43,14 +61,15 @@ body {
 }
 
 body {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .tabular {
@@ -58,9 +77,32 @@ body {
 }
 
 a.link {
-  color: var(--blue-dark);
+  color: var(--blue);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+a.link:hover {
+  color: var(--blue-hover);
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: white;
+  border-radius: 3px;
+  font-weight: 700;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--blue-hover);
+}
+.btn-secondary {
+  background: white;
+  color: var(--blue);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-weight: 700;
+}
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--blue);
 }
 
 .switch {
@@ -68,7 +110,7 @@ a.link {
   width: 40px;
   height: 24px;
   border-radius: 999px;
-  background: #c9ced8;
+  background: #c4c4cc;
   transition: background 0.15s;
   flex-shrink: 0;
 }
@@ -84,7 +126,7 @@ a.link {
   height: 18px;
   border-radius: 999px;
   background: white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   transition: transform 0.15s;
 }
 .switch[aria-checked="true"]::after {
@@ -98,7 +140,8 @@ a.link {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+.tip:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
@@ -107,6 +150,17 @@ input[type="range"] {
   accent-color: var(--blue);
   width: 100%;
   height: 28px;
+}
+
+input.field,
+select.field {
+  border: 1px solid #b3b3bb;
+  border-radius: 3px;
+  background: white;
+}
+input.field:focus,
+select.field:focus {
+  border-color: var(--blue);
 }
 
 .scroll-x {
@@ -121,13 +175,13 @@ table.data {
 }
 table.data th {
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-2);
   font-size: 12px;
   padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   white-space: nowrap;
-  background: #fafbfd;
+  background: var(--head);
 }
 table.data td {
   padding: 8px 10px;
@@ -142,6 +196,43 @@ table.data th.num {
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* Hover/focus explanation for column headers and labels */
+.tip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+.tip > .tip-label {
+  border-bottom: 1px dotted #8a8a94;
+}
+.tip > .tip-box {
+  display: none;
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 240px;
+  padding: 8px 10px;
+  background: #1f2a44;
+  color: white;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  white-space: normal;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.tip.tip-right > .tip-box {
+  left: auto;
+  right: 0;
+}
+.tip:hover > .tip-box,
+.tip:focus > .tip-box,
+.tip:focus-within > .tip-box {
+  display: block;
 }
 
 /* Grid and flex children must be allowed to shrink so wide tables scroll inside their card */

@@ -12,23 +12,23 @@ import {
   type CoeResult,
   type CoeSettings,
   type PeerBetaRow,
-  type UnleverMethod,
 } from "@/lib/coe";
 import { deDate, num, pct } from "@/lib/format";
 import { useSelection } from "./SelectionProvider";
 import { BetaStrip } from "./charts";
-import { LabelBadge, Notice, PageIntro, SectionTitle, SourceValue, Switch, downloadCsv } from "./ui";
+import { LabelBadge, Notice, PageIntro, SectionTitle, SourceValue, Switch, Tip, downloadCsv } from "./ui";
 
-export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; betas: BetaFile; capital: CapitalStructureRow[]; params: Params }) {
+export function Eigenkapitalkosten({ peers, betas, capital, params }: { peers: Peer[]; betas: BetaFile; capital: CapitalStructureRow[]; params: Params }) {
   const sel = useSelection();
   const [rf, setRf] = useState(params.riskFree.value);
   const [mrp, setMrp] = useState(params.mrp.start);
   const [targetDE, setTargetDE] = useState<number | null>(null);
   const [premium, setPremium] = useState(0);
-  const [method, setMethod] = useState<UnleverMethod>("harris-pringle");
   const [window, setWindow] = useState<BetaWindow>("w2y");
   const [index, setIndex] = useState<BetaIndex>("local");
-  const [blume, setBlume] = useState(false);
+  // Unlevering is fixed to Harris-Pringle; no Blume adjustment.
+  const method = "harris-pringle" as const;
+  const blume = false;
 
   const portalPeers = useMemo(() => {
     const base = peers.filter((p) => p.tab2.eligible && sel.tab2.includes(p.id));
@@ -53,7 +53,7 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
   const pending = betas.meta.status !== "berechnet";
   const peerName = (id: string) => peers.find((p) => p.id === id)?.shortName ?? sel.live.find((l) => l.peer.id === id)?.peer.shortName ?? id;
   const capRow = (id: string) => capital.find((c) => c.peer === id);
-  const sensActive = [method === "hamada" && "Hamada", window === "m5y" && "5 Jahre monatlich", index === "msci" && "MSCI World", blume && "Blume"].filter(Boolean) as string[];
+  const sensActive = [window === "m5y" && "5 Jahre monatlich", index === "msci" && "MSCI World"].filter(Boolean) as string[];
 
   function exportCsv() {
     const rows: (string | number | null)[][] = [
@@ -62,15 +62,14 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
       ["Marktrisikoprämie", mrp],
       ["Ziel-FK/EK", de],
       ["Zuschlag", premium],
-      ["Unlevern", method === "hamada" ? "Hamada" : "Harris-Pringle"],
+      ["Unlevern", "Harris-Pringle"],
       ["Fenster", window === "w2y" ? "2 Jahre wöchentlich" : "5 Jahre monatlich"],
       ["Index", index === "local" ? "lokal" : "MSCI World"],
-      ["Blume", blume ? "ja" : "nein"],
       [],
-      ["Sicht", "Peer", "Index", "Beta verschuldet", "Beta nach Blume", "Beobachtungen", "Bestimmtheitsmaß", "FK/EK", "Steuersatz", "Beta unverschuldet", "Status"],
+      ["Sicht", "Peer", "Index", "Beta verschuldet", "Beobachtungen", "Bestimmtheitsmaß", "FK/EK", "Beta unverschuldet", "Status"],
     ];
     const add = (view: string, list: PeerBetaRow[]) =>
-      list.forEach((r) => rows.push([view, peerName(r.peerId), r.estimate?.index ?? "", r.rawBeta, r.adjustedBeta, r.estimate?.n ?? null, r.estimate?.r2 ?? null, r.de, r.tax, r.unlevered, r.status]));
+      list.forEach((r) => rows.push([view, peerName(r.peerId), r.estimate?.index ?? "", r.rawBeta, r.estimate?.n ?? null, r.estimate?.r2 ?? null, r.de, r.unlevered, r.status]));
     add("Portal", portalRows);
     add("Reise", travelRows);
     rows.push([]);
@@ -78,7 +77,7 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
     for (const [name, r] of [["Portal", portal], ["Reise", travel]] as [string, CoeResult | null][]) {
       if (r) rows.push([name, r.n, r.unleveredLow, r.unleveredMid, r.unleveredHigh, r.releveredMid, r.coeLow, r.coeMid, r.coeHigh]);
     }
-    downloadCsv("pruefpaket-reiter2.csv", rows);
+    downloadCsv("pruefpaket-eigenkapitalkosten.csv", rows);
   }
 
   const bmid = portal?.releveredMid ?? null;
@@ -87,13 +86,13 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
   const allCells = matrix.cells.flat();
   const cMin = Math.min(...allCells);
   const cMax = Math.max(...allCells);
-  const ramp = ["#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#256abf", "#1c5cab", "#184f95"];
+  const ramp = ["#e8f1fb", "#c8ddf3", "#a7c8ea", "#87b4e2", "#66a0da", "#468cd2", "#2577c9", "#0563c1", "#0451b2", "#033fa3", "#022d94"];
   const cellColor = (v: number) => ramp[Math.min(ramp.length - 1, Math.floor(((v - cMin) / (cMax - cMin + 1e-9)) * ramp.length))];
 
   return (
     <div>
       <PageIntro
-        title="Reiter 2: Eigenkapitalkosten"
+        title="Eigenkapitalkosten"
         question="Welche Eigenkapitalkosten sind für ein Vergleichsportal-Geschäft in Deutschland plausibel, und wie stark hängen sie an den Annahmen?"
       >
         <p className="mt-2 text-sm text-[var(--text-2)] max-w-3xl">
@@ -104,7 +103,7 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
       {pending && (
         <div className="mb-4">
           <Notice tone="warn">
-            Betas noch nicht berechnet: Die Kursdaten aus S&amp;P Capital IQ bis {deDate(params.dataDates.prices)} werden eingelesen. Bis dahin zeigt dieser Reiter Rechenweg, Parameter und Sensitivitätsmatrix ohne Peer-Ergebnis.
+            Betas noch nicht berechnet: Die Kursdaten aus S&amp;P Capital IQ bis {deDate(params.dataDates.prices)} werden eingelesen. Bis dahin zeigt diese Seite Rechenweg, Parameter und Sensitivitätsmatrix ohne Peer-Ergebnis.
           </Notice>
         </div>
       )}
@@ -114,19 +113,17 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
         <ResultCard title="Reise-Sicht" result={travel} rf={rf} mrp={mrp} premium={premium} de={de} sens={sensActive} sub="Booking, Expedia, eDreams, trivago; feste Gruppe zum Vergleich" />
         <div className="card p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold">Annahmen</h2>
+            <h2 className="text-base font-bold">Annahmen</h2>
             <button
               type="button"
-              className="text-xs text-[var(--blue-dark)] underline"
+              className="text-xs text-[var(--blue)] underline"
               onClick={() => {
                 setRf(params.riskFree.value);
                 setMrp(params.mrp.start);
                 setTargetDE(null);
                 setPremium(0);
-                setMethod("harris-pringle");
                 setWindow("w2y");
                 setIndex("local");
-                setBlume(false);
               }}
             >
               Zurücksetzen
@@ -176,13 +173,11 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
           <div>
             <div className="text-sm font-medium mb-2">Sensitivitäten</div>
             <div className="space-y-2">
-              <Toggle label="Hamada statt Harris-Pringle" checked={method === "hamada"} onChange={() => setMethod(method === "hamada" ? "harris-pringle" : "hamada")} />
               <Toggle label="5 Jahre monatlich statt 2 Jahre wöchentlich" checked={window === "m5y"} onChange={() => setWindow(window === "m5y" ? "w2y" : "m5y")} />
               <Toggle label="MSCI World statt lokalem Index" checked={index === "msci"} onChange={() => setIndex(index === "msci" ? "local" : "msci")} />
-              <Toggle label="Blume-Anpassung (0,67 × β + 0,33)" checked={blume} onChange={() => setBlume(!blume)} />
             </div>
           </div>
-          <button type="button" onClick={exportCsv} className="w-full rounded-lg border border-[var(--line)] bg-white px-3 py-1.5 text-sm hover:border-[var(--blue)]">
+          <button type="button" onClick={exportCsv} className="w-full btn-secondary px-3 py-1.5 text-sm">
             Prüfpaket (CSV)
           </button>
         </div>
@@ -206,13 +201,13 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
       <section className="card p-4 mt-4">
         <SectionTitle title="Peer-Tabelle" sub={`Index lokal oder MSCI World; Fenster ${window === "w2y" ? "104 Wochen bis 20.11.2026" : "60 Monate bis 20.11.2026"}. Mindestens ${params.minWeeks} Wochen bzw. ${params.minMonths} Monate.`} />
         <div className="scroll-x">
-          <BetaTable title="Portal-Sicht, aktiv" rows={portalRows} peers={peers} peerName={peerName} capRow={capRow} blume={blume} />
+          <BetaTable title="Portal-Sicht, aktiv" rows={portalRows} peers={peers} peerName={peerName} capRow={capRow} />
           <div className="h-4" />
-          <BetaTable title="Reise-Sicht" rows={travelRows} peers={peers} peerName={peerName} capRow={capRow} blume={blume} />
+          <BetaTable title="Reise-Sicht" rows={travelRows} peers={peers} peerName={peerName} capRow={capRow} />
           {inactiveRows.length > 0 && (
             <>
               <div className="h-4" />
-              <BetaTable title="Geeignet, aber ausgeschaltet" rows={inactiveRows} peers={peers} peerName={peerName} capRow={capRow} blume={blume} muted />
+              <BetaTable title="Geeignet, aber ausgeschaltet" rows={inactiveRows} peers={peers} peerName={peerName} capRow={capRow} muted />
             </>
           )}
         </div>
@@ -241,7 +236,7 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
                   <td className="num font-medium">{num(b, 1)}</td>
                   {matrix.cells[i].map((v, j) => {
                     const bg = cellColor(v);
-                    const dark = ramp.indexOf(bg) >= 6;
+                    const dark = ramp.indexOf(bg) >= 5;
                     const hi = i === hiRow && j === hiCol;
                     return (
                       <td
@@ -266,11 +261,9 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
         <ol className="text-sm space-y-1.5 list-decimal pl-5">
           <li>Renditen aus Schlusskursen von Aktie und breitem lokalem Index (S&amp;P Capital IQ), 2 Jahre wöchentlich bis {deDate(params.dataDates.prices)}.</li>
           <li>Verschuldetes Beta βL per Regression der Aktienrendite auf die Indexrendite.</li>
-          <li>
-            Unlevern: {method === "hamada" ? "βu = βL ÷ (1 + (1 − t) × FK/EK) nach Hamada" : "βu = βL ÷ (1 + FK/EK) nach Harris-Pringle"}. FK/EK = Nettofinanzverschuldung ohne Leasing ÷ Marktkapitalisierung, mindestens 0.
-          </li>
+          <li>Unlevern nach Harris-Pringle: βu = βL ÷ (1 + FK/EK). FK/EK = Nettofinanzverschuldung ohne Leasing ÷ Marktkapitalisierung, mindestens 0.</li>
           <li>Median und Quartile der unverschuldeten Betas der aktiven Peers.</li>
-          <li>Relevern: βL* = βu × (1 + {method === "hamada" ? "(1 − 30 %) × " : ""}Ziel-FK/EK).</li>
+          <li>Relevern: βL* = βu × (1 + Ziel-FK/EK).</li>
           <li>
             CAPM: rE = Basiszins + βL* × Marktrisikoprämie + Zuschlag
             {portal && (
@@ -294,11 +287,11 @@ export function Reiter2({ peers, betas, capital, params }: { peers: Peer[]; beta
 function ResultCard({ title, sub, result, rf, mrp, premium, de, sens }: { title: string; sub?: string; result: CoeResult | null; rf: number; mrp: number; premium: number; de: number; sens: string[] }) {
   return (
     <div className="card p-4">
-      <div className="text-sm font-semibold">{title}</div>
+      <div className="text-sm font-bold">{title}</div>
       {sub && <div className="text-xs text-[var(--text-2)]">{sub}</div>}
       {result ? (
         <>
-          <div className="mt-3 text-[40px] leading-none font-semibold tabular text-[var(--navy)]">{pct(result.coeMid, 1)}</div>
+          <div className="mt-3 text-[40px] leading-none font-bold tabular text-[var(--navy)]">{pct(result.coeMid, 1)}</div>
           <div className="mt-1 text-sm text-[var(--text-2)] tabular">
             Spanne {pct(result.coeLow, 1)} bis {pct(result.coeHigh, 1)}
           </div>
@@ -387,13 +380,22 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
   );
 }
 
+const BETA_TIPS = {
+  index: "Vergleichsindex der Regression: breiter Aktienindex des Heimatmarkts. Sensitivität: MSCI World in der Währung der Aktie.",
+  bl: "Verschuldetes Beta: um wie viel Prozent sich die Aktie im Schnitt bewegt, wenn der Index um 1 % steigt oder fällt. Aus der Regression der Wochen- bzw. Monatsrenditen.",
+  n: "Beobachtungen: Anzahl der Renditen in der Regression, 104 Wochen (2 Jahre) bzw. 60 Monate (5 Jahre).",
+  r2: "Bestimmtheitsmaß R²: Anteil der Kursbewegung, den der Index erklärt (0 bis 1). Niedrig heißt: Das Beta ist statistisch unsicher.",
+  de: "FK/EK: Nettofinanzverschuldung (Finanzschulden minus Kasse, ohne Leasing) geteilt durch den Börsenwert. 0 % = mehr Kasse als Schulden.",
+  bu: "Unverschuldetes Beta: βL ohne den Effekt der Verschuldung, βu = βL ÷ (1 + FK/EK). Aus diesen Werten entstehen Median und Spanne.",
+  note: "Besonderheiten, die das Beta verzerren können, zum Beispiel ein Großaktionär, eine Übernahme oder geringe Liquidität.",
+};
+
 function BetaTable({
   title,
   rows,
   peers,
   peerName,
   capRow,
-  blume,
   muted,
 }: {
   title: string;
@@ -401,29 +403,47 @@ function BetaTable({
   peers: Peer[];
   peerName: (id: string) => string;
   capRow: (id: string) => CapitalStructureRow | undefined;
-  blume: boolean;
   muted?: boolean;
 }) {
+  const viewTip = title.startsWith("Reise")
+    ? "Online-Reiseanbieter als Gegenprobe; feste Gruppe, nicht abwählbar."
+    : title.startsWith("Geeignet")
+      ? "Börsennotierte Peers, die auf der Seite Peer-Gruppe ausgeschaltet sind. Sie zählen nicht in Median und Spanne."
+      : "Vergleichsportale, deren Schalter für die Eigenkapitalkosten an ist. Aus ihnen entstehen Median und Spanne.";
   return (
-    <table className="data min-w-[900px]">
+    <table className="data min-w-[820px]">
       <thead>
         <tr>
-          <th>{title}</th>
-          <th>Index</th>
-          <th className="num">βL</th>
-          {blume && <th className="num">βL Blume</th>}
-          <th className="num">Beob.</th>
-          <th className="num">R²</th>
-          <th className="num">FK/EK</th>
-          <th className="num">Steuer</th>
-          <th className="num">βu</th>
-          <th>Beta-Hinweis</th>
+          <th>
+            <Tip label={title} tip={viewTip} />
+          </th>
+          <th>
+            <Tip label="Index" tip={BETA_TIPS.index} />
+          </th>
+          <th className="num">
+            <Tip label="βL" tip={BETA_TIPS.bl} />
+          </th>
+          <th className="num">
+            <Tip label="Beob." tip={BETA_TIPS.n} />
+          </th>
+          <th className="num">
+            <Tip label="R²" tip={BETA_TIPS.r2} />
+          </th>
+          <th className="num">
+            <Tip label="FK/EK" tip={BETA_TIPS.de} />
+          </th>
+          <th className="num">
+            <Tip label="βu" tip={BETA_TIPS.bu} />
+          </th>
+          <th>
+            <Tip label="Beta-Hinweis" tip={BETA_TIPS.note} align="right" />
+          </th>
         </tr>
       </thead>
       <tbody>
         {rows.length === 0 && (
           <tr>
-            <td colSpan={10} className="text-[var(--text-3)]">
+            <td colSpan={8} className="text-[var(--text-3)]">
               Keine Peers.
             </td>
           </tr>
@@ -433,10 +453,9 @@ function BetaTable({
           const cs = capRow(r.peerId);
           return (
             <tr key={r.peerId} className={muted ? "muted" : undefined}>
-              <td className="font-medium whitespace-nowrap">{peerName(r.peerId)}</td>
+              <td className="font-bold whitespace-nowrap">{peerName(r.peerId)}</td>
               <td className="whitespace-nowrap text-xs">{r.estimate?.index ?? p?.index ?? "–"}</td>
               <td className="num">{num(r.rawBeta)}</td>
-              {blume && <td className="num">{num(r.adjustedBeta)}</td>}
               <td className="num">{r.estimate ? r.estimate.n : "–"}</td>
               <td className="num">{r.estimate ? num(r.estimate.r2) : "–"}</td>
               <td className="num">
@@ -458,9 +477,8 @@ function BetaTable({
                   "–"
                 )}
               </td>
-              <td className="num">{pct(r.tax, 1)}</td>
-              <td className="num font-semibold">{num(r.unlevered)}</td>
-              <td className="text-xs max-w-[260px]">
+              <td className="num font-bold">{num(r.unlevered)}</td>
+              <td className="text-xs max-w-[300px]">
                 {r.status !== "ok" && (
                   <div className="mb-0.5">
                     <LabelBadge label={r.status === "nicht live verfügbar" ? "Beta nicht live verfügbar" : r.status === "kein Beta" ? "Beta ausstehend" : r.status} />

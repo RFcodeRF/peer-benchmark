@@ -10,19 +10,19 @@ const LABELS = [
   ["Eigene Rechnung", "Aus berichteten Zahlen nach einer offengelegten Formel berechnet, zum Beispiel eine Marge oder ein LTM-Wert."],
   ["Annahme", "Enthält eine Zuordnung oder Schätzung, die nicht in der Quelle steht. Die Begründung steht im Hinweis zur Zahl."],
   ["Automatisch erfasst", "Live abgerufen und nicht manuell geprüft. Gilt nur für Peers, die in der Sitzung hinzugefügt wurden."],
+  ["Manuell", "Vom Nutzer in der Live-Prüfung aus dem verlinkten Abschluss eingetragen. Gilt nur für die laufende Sitzung."],
 ];
 
 export default function Methodik() {
   const { params, betas, peers } = loadData();
-  const taxes = params.taxSources;
   return (
     <div className="max-w-4xl">
-      <h1 className="text-2xl font-semibold tracking-tight">Methodik</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Methodik</h1>
       <p className="mt-2 text-[15px] text-[var(--text-2)]">
         Alle Formeln, Annahmen und Quellen in klarer Sprache. Jede Zahl im Dashboard zeigt beim Antippen Quelle, Stand und Label. Datenstand: Kurse {deDate(params.dataDates.prices)}, Abschlüsse {deDate(params.dataDates.filings)}. Was danach veröffentlicht wird, fließt nicht ein.
       </p>
 
-      <Section title="Vier Labels">
+      <Section title="Fünf Labels">
         <table className="data">
           <tbody>
             {LABELS.map(([l, d]) => (
@@ -37,7 +37,7 @@ export default function Methodik() {
 
       <Section title="Peer-Gruppe und Score">
         <p>
-          Das Universum umfasst 14 Unternehmen. Neun Vergleichsportale sind beim Start für Reiter 1 eingeschaltet, fünf davon auch für Reiter 2. Jeder Peer ist je Reiter abwählbar; die Auswahl gilt nur für die laufende Sitzung. Der Knopf „Standard-Gruppe wiederherstellen“ setzt sie zurück.
+          Das Universum umfasst 14 Unternehmen. Neun Vergleichsportale sind beim Start für die Margen eingeschaltet, sechs Unternehmen für die Eigenkapitalkosten. Jeder Peer ist je Berechnung abwählbar; die Auswahl gilt nur für die laufende Sitzung. Der Knopf „Standard-Gruppe wiederherstellen“ setzt sie zurück.
         </p>
         <p className="mt-2">Score = 1 + K1 + K2 + K3 + K4, je 0, 0,5 oder 1 Punkt. Maßstab ist das öffentlich bekannte Profil eines deutschen Mehrsparten-Vergleichsportals; interne Informationen fließen nicht ein.</p>
         <ul className="mt-2 list-disc pl-5 space-y-1">
@@ -47,6 +47,7 @@ export default function Methodik() {
             </li>
           ))}
         </ul>
+        <p className="mt-2">Wirkung des Scores: Er sortiert die Liste und begründet die Vorauswahl. In die Rechnungen geht er nicht ein; dort zählt nur der Schalter, und jeder aktive Peer hat das gleiche Gewicht im Median.</p>
         <p className="mt-2">Die Beta-Qualität (Liquidität, beherrschender Aktionär, Übernahmesituation) steht separat und fließt nicht in den Score ein.</p>
       </Section>
 
@@ -54,14 +55,15 @@ export default function Methodik() {
         <ol className="list-decimal pl-5 space-y-1">
           <li>Suche nach Name oder Ticker bei der SEC (US-Emittenten), bei filings.xbrl.org (ESEF-Berichte börsennotierter EU-Unternehmen) und bei Companies House (britische Gesellschaften). Für Frankreich ist keine Abfrage eingerichtet; das Tool meldet „Abschlüsse manuell prüfen“.</li>
           <li>Hürde: Abschlüsse für mindestens zwei Jahre, sonst „nicht hinzufügbar“ mit Grund.</li>
-          <li>Reiter 1: Live wird nur die EBITDA-Marge übernommen, (EBIT + Abschreibungen) ÷ Umsatz aus XBRL-Daten. Eine Marketingmarge erscheint nur mit geprüfter Definition.</li>
-          <li>Reiter 2: Börsennotierte Peers gelten als geeignet. Ein Beta ist live nicht verfügbar, weil die App keine Kursdaten abruft.</li>
+          <li>Margen: Live wird die EBITDA-Marge übernommen, (EBIT + Abschreibungen) ÷ Umsatz aus XBRL-Daten (SEC, ESEF). Bei Companies House liest die App digitale Abschlüsse (iXBRL) automatisch aus; Abschlüsse, die nur als PDF vorliegen, lassen sich nicht zuverlässig auswerten.</li>
+          <li>Manuelle Zahlen: Fehlen automatische Zahlen, trägt der Nutzer Umsatz, EBIT, Abschreibungen und optional Marketingaufwand je Geschäftsjahr aus dem verlinkten Abschluss ein (Label „Manuell“). Eine Marketingmarge erscheint live nur aus solchen manuell eingetragenen Werten.</li>
+          <li>Eigenkapitalkosten: Börsennotierte Peers gelten als geeignet. Ein Beta ist live nicht verfügbar, weil die App keine Kursdaten abruft.</li>
           <li>Score: Mit hinterlegtem Claude-Schlüssel schlägt Claude K1 bis K4 und zwei Sätze vor (Label „KI-Vorschlag“). Für häufig genannte Kandidaten gibt es eine vorbereitete Einschätzung vom 22.11.2026. Sonst setzt der Nutzer K1 bis K4 per Auswahl; die Sätze entstehen aus der Regel.</li>
           <li>Grenzen: höchstens 20 Live-Prüfungen je Besucher und Tag; Antwort innerhalb von rund 20 Sekunden, sonst „Quelle antwortet nicht“.</li>
         </ol>
       </Section>
 
-      <Section title="Reiter 1: Margen">
+      <Section title="Margen">
         <ul className="list-disc pl-5 space-y-1">
           <li>Marketingmarge = (Umsatz − Marketingaufwand) ÷ Umsatz, mit der Abgrenzung des Unternehmens. Eine harmonisierte Umrechnung gibt es bewusst nicht; die Definitionstabelle zeigt die Unterschiede.</li>
           <li>EBITDA-Marge bereinigt = bereinigtes EBITDA des Unternehmens ÷ Umsatz. Unbereinigt = (EBIT + Abschreibungen) ÷ Umsatz, gleiche Regel für alle.</li>
@@ -71,17 +73,16 @@ export default function Methodik() {
         </ul>
       </Section>
 
-      <Section title="Reiter 2: Eigenkapitalkosten">
+      <Section title="Eigenkapitalkosten">
         <ol className="list-decimal pl-5 space-y-1">
           <li>Kurse: tägliche Schlusskurse aus S&amp;P Capital IQ bis {deDate(params.dataDates.prices)}, split-bereinigt, Landeswährung. Rohdaten werden nicht veröffentlicht, nur die gerechneten Betas.</li>
           <li>Renditen: wöchentlich aus Freitags-Schlusskursen (bei Feiertag letzter Handelstag der Woche), 104 Wochen. Sensitivität: monatlich, 60 Monate.</li>
           <li>Verschuldetes Beta: Regression (kleinste Quadrate) der Aktienrendite auf die Rendite eines breiten lokalen Index; mindestens {params.minWeeks} Wochen bzw. {params.minMonths} Monate. Sensitivität: MSCI World in der Währung der Aktie.</li>
           <li>FK/EK = Nettofinanzverschuldung ohne Leasing laut letztem Abschluss ÷ Marktkapitalisierung am {deDate(params.dataDates.prices)}; Untergrenze 0.</li>
-          <li>Unlevern nach Harris-Pringle: βu = βL ÷ (1 + FK/EK). Sensitivität Hamada: βu = βL ÷ (1 + (1 − t) × FK/EK) mit gesetzlichem Steuersatz des Peers.</li>
+          <li>Unlevern nach Harris-Pringle: βu = βL ÷ (1 + FK/EK). Die Formel unterstellt, dass die Schulden mit dem Geschäft mitwachsen (Steuervorteil so riskant wie das Geschäft); bei den geringen Verschuldungsgraden der Peers ist der Unterschied zu anderen Formeln klein.</li>
           <li>Median und 25-%- bzw. 75-%-Quantil der unverschuldeten Betas der aktiven Peers (lineare Interpolation wie Excel QUARTILE.INC). Unter drei Peers: Minimum und Maximum mit Warnung.</li>
-          <li>Relevern: βL* = βu × (1 + Ziel-FK/EK); bei Hamada mit (1 − {pct(params.targetTaxRate.value, 0)}).</li>
+          <li>Relevern: βL* = βu × (1 + Ziel-FK/EK). Ziel-FK/EK startet beim Median der aktiven Peers.</li>
           <li>CAPM: rE = Basiszins + βL* × Marktrisikoprämie + Zuschlag. Punktwert mit dem Median, Spanne mit den Quartilen, jeweils bei der eingestellten Prämie. Die Wirkung der Prämie zeigt die Sensitivitätsmatrix.</li>
-          <li>Blume-Anpassung als Sensitivität: 0,67 × βL + 0,33, angewendet vor dem Unlevern.</li>
         </ol>
         <table className="data mt-3">
           <thead>
@@ -114,20 +115,6 @@ export default function Methodik() {
                 , Stand {deDate(params.mrp.asOf)}
               </td>
             </tr>
-            <tr>
-              <td>Steuersatz beim Relevern (nur Hamada)</td>
-              <td className="tabular">{pct(params.targetTaxRate.value, 0)}</td>
-              <td>{params.targetTaxRate.source}</td>
-            </tr>
-            {Object.entries(taxes).map(([cc, t]) => (
-              <tr key={cc}>
-                <td>Steuersatz {cc} (nur Hamada)</td>
-                <td className="tabular">{pct(t.rate, 1)}</td>
-                <td>
-                  {t.source} ({t.label})
-                </td>
-              </tr>
-            ))}
           </tbody>
         </table>
         <p className="mt-2 text-xs text-[var(--text-2)]">
@@ -162,7 +149,7 @@ export default function Methodik() {
 
       <Section title="Prüfpaket und Nachrechnung">
         <p>
-          Reiter 1 und Reiter 2 bieten je einen Download „Prüfpaket (CSV)“ mit jeder angezeigten Zahl, Label, Rechnung, Quelle und Stand. Die Datei öffnet direkt in Excel. Zwei Fälle sind in Excel nachgerechnet: EverQuote (Margen) und MONY (Beta bis Eigenkapitalkosten).
+          Die Seiten Margen und Eigenkapitalkosten bieten je einen Download „Prüfpaket (CSV)“ mit jeder angezeigten Zahl, Label, Rechnung, Quelle und Stand. Die Datei öffnet direkt in Excel. Zwei Fälle sind in Excel nachgerechnet: EverQuote (Margen) und MONY (Beta bis Eigenkapitalkosten).
         </p>
       </Section>
 
@@ -198,6 +185,8 @@ export default function Methodik() {
           <li>22.11.2026: App-Grundgerüst mit Rechenkern, Prüfskript und Tests; Live-Prüfung über SEC, filings.xbrl.org und Companies House.</li>
           <li>22.11.2026: Kurse aus S&amp;P Capital IQ (Chart Builder) bis 20.11.2026, Betas lokal gerechnet; Excel-Nachrechnung für MONY stimmt mit SLOPE überein.</li>
           <li>22.11.2026: Finanzzahlen aus Geschäftsberichten, 10-K, 10-Q, Ergebnismitteilungen und Companies House erfasst, jede Zeile mit Quelle, Stand und Label.</li>
+          <li>23.11.2026: Restliche Peers erfasst (Hypoport, eDreams, PB Fintech, Booking 2023), Deployment auf Vercel, Live-Prüfung auf der echten Seite getestet und drei Fehler behoben.</li>
+          <li>23.11.2026: Feedback-Runde: Design im klassischen Vergleichsportal-Look, Periodenauswahl, Erklärungen beim Überfahren der Spaltenköpfe, Hypoport standardmäßig in den Eigenkapitalkosten, Hamada und Blume entfernt, Companies-House-Zahlen aus iXBRL und manuelle Eingabe.</li>
         </ul>
       </Section>
 
@@ -218,7 +207,7 @@ export default function Methodik() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="card p-4 mt-4 text-sm leading-6">
-      <h2 className="text-base font-semibold mb-2">{title}</h2>
+      <h2 className="text-base font-bold mb-2">{title}</h2>
       {children}
     </section>
   );

@@ -4,7 +4,7 @@ import { Fragment, useMemo, useState } from "react";
 import type { Peer, ScoreEntry } from "@/lib/types";
 import { CRITERIA, formatScore, totalScore } from "@/lib/score";
 import { useSelection } from "./SelectionProvider";
-import { LabelBadge, Notice, PageIntro, Switch } from "./ui";
+import { LabelBadge, Notice, PageIntro, ScoreBadge, Switch, Tip } from "./ui";
 import { LiveCheck, type Candidate } from "./LiveCheck";
 
 interface Row {
@@ -27,37 +27,44 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
     <div>
       <PageIntro title="Peer-Gruppe">
         <p className="mt-2 text-[15px] text-[var(--text-2)] max-w-3xl">
-          14 vorab geprüfte Vergleichsportale und Vermittler, sortiert nach Eignungs-Score. Die Schalter je Reiter bestimmen, wer in die Rechnung eingeht; alle Ansichten rechnen sofort neu. Neue Kandidaten prüft das Tool unten live.
+          14 vorab geprüfte Vergleichsportale und Vermittler, sortiert nach Eignungs-Score. Die Schalter bestimmen, wer in die Margen und in die Eigenkapitalkosten eingeht; alle Ansichten rechnen sofort neu. Neue Kandidaten prüft das Tool unten live.
         </p>
       </PageIntro>
 
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div className="text-sm text-[var(--text-2)]">
-          Aktiv: <span className="font-semibold text-[var(--text)] tabular">{sel.tab1.length}</span> in Reiter 1,{" "}
-          <span className="font-semibold text-[var(--text)] tabular">{sel.tab2.length}</span> in Reiter 2
+          Aktiv: <span className="font-bold text-[var(--text)] tabular">{sel.tab1.length}</span> in den Margen,{" "}
+          <span className="font-bold text-[var(--text)] tabular">{sel.tab2.length}</span> in den Eigenkapitalkosten
           {!sel.isDefault && <span className="ml-2 text-[#7a5200]">· Auswahl weicht von der Standard-Gruppe ab</span>}
         </div>
         <button
           type="button"
           onClick={sel.reset}
           disabled={sel.isDefault}
-          className="rounded-lg border border-[var(--line)] bg-white px-3 py-1.5 text-sm font-medium hover:border-[var(--blue)] disabled:opacity-40"
+          className="btn-secondary px-3 py-1.5 text-sm disabled:opacity-40"
         >
           Standard-Gruppe wiederherstellen
         </button>
       </div>
 
       <div className="card scroll-x">
-        <table className="data min-w-[860px]">
+        <table className="data min-w-[780px]">
           <thead>
             <tr>
               <th className="num w-10">Rang</th>
               <th>Unternehmen</th>
-              <th className="num">Score</th>
-              <th>K1 bis K4</th>
-              <th>Reiter 1</th>
-              <th>Reiter 2</th>
-              <th>Beta-Qualität</th>
+              <th className="num">
+                <Tip label="Score" tip="Eignungs-Score von 1 bis 5: wie nah das Geschäftsmodell an einem deutschen Mehrsparten-Vergleichsportal liegt. Grün ab 4, gelb 3 bis 3,5, rot darunter." />
+              </th>
+              <th>
+                <Tip label="Margen" tip="Peer zählt für die Berechnung der Marketing- und EBITDA-Marge." />
+              </th>
+              <th>
+                <Tip label="Eigenkapitalkosten" tip="Peer zählt für die Berechnung der Eigenkapitalkosten (Beta)." />
+              </th>
+              <th>
+                <Tip label="Beta-Qualität" tip="Wie gut das Aktienkurs-Beta das Geschäftsrisiko misst: Liquidität, beherrschender Aktionär, Übernahmen. Fließt nicht in den Score ein." />
+              </th>
               <th aria-label="Details" />
             </tr>
           </thead>
@@ -71,30 +78,16 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
                   <tr className={isOpen ? "bg-[#fafbfd]" : undefined}>
                     <td className="num text-[var(--text-2)]">{i + 1}</td>
                     <td>
-                      <div className="font-medium flex items-center gap-2 flex-wrap">
+                      <div className="font-bold flex items-center gap-2 flex-wrap">
                         {p.shortName}
                         {r.live && <LabelBadge label="Automatisch erfasst" />}
                       </div>
                       <div className="text-xs text-[var(--text-2)]">
-                        {p.country}
-                        {p.listed ? ` · ${p.exchange}${p.ticker ? ` ${p.ticker}` : ""}` : " · privat"}
+                        {p.country} · {p.listed ? "börsennotiert" : "privat"}
                       </div>
-                      <div className="text-xs text-[var(--text-3)] max-w-[320px]">{p.business}</div>
                     </td>
                     <td className="num">
-                      <span className="text-lg font-semibold">{formatScore(total)}</span>
-                      <div className="mt-1 h-1.5 w-14 ml-auto rounded-full bg-[var(--grid)] overflow-hidden" aria-hidden>
-                        <div className="h-full bg-[var(--blue)]" style={{ width: `${((total - 1) / 4) * 100}%` }} />
-                      </div>
-                    </td>
-                    <td>
-                      <div className="flex gap-1 flex-wrap">
-                        {(["k1", "k2", "k3", "k4"] as const).map((k) => (
-                          <span key={k} className="rounded border border-[var(--line)] px-1.5 py-px text-xs tabular" title={CRITERIA.find((c) => c.key === k)?.name}>
-                            {k.toUpperCase()} {formatScore(r.score[k]).replace(",0", "")}
-                          </span>
-                        ))}
-                      </div>
+                      <ScoreBadge total={total} display={formatScore(total)} />
                       {r.score.origin !== "Eigene Einschätzung" && (
                         <div className="mt-1">
                           <LabelBadge label={r.score.origin === "KI-Vorschlag" && !r.score.confirmed ? "KI-Vorschlag" : r.score.origin} />
@@ -114,7 +107,7 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
                     <td>
                       <button
                         type="button"
-                        className="text-sm text-[var(--blue-dark)] underline underline-offset-2 whitespace-nowrap"
+                        className="text-sm text-[var(--blue)] underline underline-offset-2 whitespace-nowrap"
                         aria-expanded={isOpen}
                         onClick={() => setOpen(isOpen ? null : p.id)}
                       >
@@ -125,7 +118,7 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
                   {isOpen && (
                     <tr className="bg-[#fafbfd]">
                       <td />
-                      <td colSpan={7}>
+                      <td colSpan={6}>
                         <div className="grid gap-4 md:grid-cols-2 py-1">
                           <div>
                             <div className="text-xs font-semibold text-[var(--text-2)] mb-1">Einschätzung in zwei Sätzen</div>
@@ -149,7 +142,7 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
                               ))}
                             </ul>
                             <div className="text-xs text-[var(--text-2)] mt-2">
-                              Reiter 1: {p.tab1.reason}. Reiter 2: {p.tab2.reason}.
+                              {p.business}. Margen: {p.tab1.reason}. Eigenkapitalkosten: {p.tab2.reason}.
                             </div>
                             {r.live && (
                               <button type="button" className="mt-2 text-sm text-[var(--crit)] underline" onClick={() => sel.removeLive(p.id)}>
@@ -173,7 +166,7 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
           <LiveCheck candidates={candidates} />
         </div>
         <div className="lg:col-span-2 card p-4">
-          <h2 className="text-base font-semibold">So entsteht der Score</h2>
+          <h2 className="text-base font-bold">So entsteht der Score</h2>
           <p className="text-sm text-[var(--text-2)] mt-1">
             Score = 1 + K1 + K2 + K3 + K4, je 0, 0,5 oder 1 Punkt. Maßstab ist das öffentlich bekannte Profil eines deutschen Mehrsparten-Vergleichsportals.
           </p>
@@ -187,6 +180,9 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
               </li>
             ))}
           </ul>
+          <p className="mt-3 text-sm">
+            <span className="font-bold">Wirkung:</span> Der Score sortiert die Liste und begründet die Vorauswahl. In die Rechnungen geht er nicht ein: Dort zählt nur, ob der Schalter an ist, und jeder aktive Peer hat das gleiche Gewicht im Median.
+          </p>
           <div className="mt-3">
             <Notice>Ein börsennotierter Peer mit Score 5 existiert nicht: Verivox gehört seit 2025 zu Moltiply. Die Beta-Qualität fließt nicht in den Score ein und steht separat.</Notice>
           </div>
@@ -200,17 +196,21 @@ function TabCell({ tab, peer }: { tab: "tab1" | "tab2"; peer: Peer }) {
   const sel = useSelection();
   const info = peer[tab];
   if (!info.eligible) {
-    return <div className="text-xs text-[var(--text-3)] max-w-[160px]">Nicht geeignet: {info.reason}</div>;
+    return <div className="text-xs text-[var(--text-3)] max-w-[170px]">Nicht geeignet: {info.reason}</div>;
   }
   const on = sel.isOn(tab, peer.id);
-  const extra = tab === "tab1" && peer.tab1.scope === "nur EBITDA" ? "nur EBITDA-Marge" : tab === "tab2" && peer.live ? "Beta nicht live verfügbar" : tab === "tab2" && peer.tab2.travel ? "auch Reise-Sicht" : null;
+  const extra =
+    tab === "tab1" && peer.tab1.scope === "nur EBITDA"
+      ? "nur EBITDA-Marge"
+      : tab === "tab2" && peer.live
+        ? "Beta nicht live verfügbar"
+        : tab === "tab2" && peer.tab2.travel
+          ? "auch Reise-Sicht"
+          : null;
   return (
     <div className="flex items-center gap-2">
-      <Switch checked={on} onChange={() => sel.toggle(tab, peer.id)} label={`${peer.shortName} in ${tab === "tab1" ? "Reiter 1" : "Reiter 2"}`} />
-      <span className="text-xs text-[var(--text-2)]">
-        {on ? "an" : "aus"}
-        {extra && <span className="block text-[var(--text-3)]">{extra}</span>}
-      </span>
+      <Switch checked={on} onChange={() => sel.toggle(tab, peer.id)} label={`${peer.shortName} in ${tab === "tab1" ? "Margen" : "Eigenkapitalkosten"}`} />
+      {extra && <span className="text-xs text-[var(--text-3)] max-w-[110px]">{extra}</span>}
     </div>
   );
 }
