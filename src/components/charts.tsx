@@ -16,7 +16,9 @@ export const PERIOD_NAMES: Record<PeriodKey, string> = { FY2023: "GJ 2023", FY20
 
 function niceTicks(min: number, max: number, step: number) {
   const out: number[] = [];
-  for (let v = Math.floor(min / step) * step; v <= max + 1e-9; v += step) out.push(Math.round(v * 1000) / 1000);
+  // The last tick always reaches at least max, so no point sits outside the axis.
+  const end = Math.ceil(max / step - 1e-9) * step;
+  for (let v = Math.floor(min / step) * step; v <= end + 1e-9; v += step) out.push(Math.round(v * 1000) / 1000);
   return out;
 }
 
