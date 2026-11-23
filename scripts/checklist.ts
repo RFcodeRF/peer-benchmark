@@ -4,7 +4,7 @@ import { buildSeries } from "../src/lib/finance";
 import { buildBetaRows, computeCoe, medianDE } from "../src/lib/coe";
 const d = loadData();
 const pct = (v: number | null | undefined) => (v == null ? "–" : (v * 100).toFixed(1) + " %");
-for (const id of ["everquote", "mony", "lendingtree", "nerdwallet", "trivago", "moltiply", "ctm", "gocompare", "skyscanner", "booking", "expedia"]) {
+for (const id of ["everquote", "mony", "lendingtree", "nerdwallet", "trivago", "moltiply", "ctm", "gocompare", "skyscanner", "booking", "expedia", "edreams", "hypoport", "pbfintech"]) {
   const s = buildSeries(id, d.financials);
   const row = (k: keyof typeof s) => ["FY2023", "FY2024", "FY2025", "LTM"].map((p) => pct((s[k] as any)[p]?.value)).join(" | ");
   console.log(id.padEnd(12), "MM", row("marketingMargin"), " || EBITDA adj", row("ebitdaAdjMargin"), " || unadj", row("ebitdaUnadjMargin"));

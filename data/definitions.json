@@ -38,7 +38,8 @@
     "revenueScope": "Umsatz der Sparte Mavriq (ohne BPO)",
     "specialCases": [
       "Verivox ist seit März 2025 enthalten; GJ 2025 ist deshalb nur teilweise mit GJ 2024 vergleichbar.",
-      "Für die letzten zwölf Monate ist kein Marketingaufwand berichtet; die Marketingmarge endet beim GJ 2025."
+      "Für die letzten zwölf Monate ist kein Marketingaufwand berichtet; die Marketingmarge endet beim GJ 2025.",
+      "Für 2023 ist kein Marketingaufwand verfügbar; die Marketingmarge beginnt 2024."
     ]
   },
   "trivago": {
@@ -64,10 +65,12 @@
   "hypoport": {
     "marketing": "Nicht berichtet: Hypoport weist Provisionen und Lead-Kosten aus, aber keinen Marketingaufwand.",
     "marketingLabel": "Nicht berichtet",
-    "ebitdaAdj": "EBITDA laut Hypoport; keine weiteren Bereinigungen.",
-    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV.",
+    "ebitdaAdj": "EBITDA laut Hypoport. Für 2023 das von Hypoport bereinigte EBITDA ohne positive Einmaleffekte von 16 Mio. EUR; ab 2024 berichtet Hypoport keine Bereinigungen.",
+    "ebitdaUnadj": "EBITDA laut Kennzahlentabelle von Hypoport.",
     "revenueScope": "Konzernumsatz",
-    "specialCases": []
+    "specialCases": [
+      "Vergleichszahlen 2023 angepasst: geänderte Umsatzrealisierung (+133 Mio. EUR Umsatz und Vertriebskosten, ohne Wirkung auf das EBITDA) und Umsatzabgrenzung Starpool (+1,0 Mio. EUR)."
+    ]
   },
   "everquote": {
     "marketing": "Variable Marketing Dollars (VMD): Umsatz minus Werbeaufwand. Marketingmarge = VMD ÷ Umsatz.",
@@ -99,10 +102,11 @@
     "marketing": "Umsatz minus Advertising and promotion expenses laut GuV.",
     "marketingLabel": "Eigene Rechnung",
     "ebitdaAdj": "Adjusted EBITDA laut PB Fintech (ohne ESOP-Aufwand und sonstige Erträge).",
-    "ebitdaUnadj": "Ergebnis vor Steuern, Zinsen und Abschreibungen laut GuV.",
+    "ebitdaUnadj": "Umsatz minus operative Aufwendungen ohne Zinsen und Abschreibungen, ohne sonstige Erträge; entspricht dem von PB Fintech berichteten EBITDA.",
     "revenueScope": "Konzernumsatz (Revenue from operations)",
     "specialCases": [
-      "Geschäftsjahr endet am 31. März."
+      "Geschäftsjahr endet am 31. März.",
+      "Für das laufende Geschäftsjahr sind noch keine Halbjahreszahlen erfasst; die letzten zwölf Monate fehlen deshalb."
     ]
   },
   "booking": {
@@ -111,7 +115,9 @@
     "ebitdaAdj": "Adjusted EBITDA laut Booking Holdings.",
     "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV und Kapitalflussrechnung.",
     "revenueScope": "Konzernumsatz",
-    "specialCases": []
+    "specialCases": [
+      "Umsatz Q3 2026 um 900 Mio. USD gemindert (Vergleich mit der US-Handelsbehörde FTC); das Adjusted EBITDA bereinigt diesen Effekt, der Umsatz nicht."
+    ]
   },
   "expedia": {
     "marketing": "Umsatz minus Selling and Marketing direct (direkte Vertriebs- und Marketingkosten) laut Anhang.",
@@ -124,11 +130,12 @@
   "edreams": {
     "marketing": "Revenue Margin minus variable Kosten. Die variablen Kosten enthalten neben Marketing auch Zahlungs- und Dienstleisterkosten; der Wert ist deshalb eine Untergrenze der Marketingmarge.",
     "marketingLabel": "Annahme",
-    "ebitdaAdj": "Cash EBITDA laut eDreams ODIGEO.",
-    "ebitdaUnadj": "Betriebsergebnis plus Abschreibungen laut GuV.",
+    "ebitdaAdj": "Adjusted EBITDA laut eDreams ODIGEO (ohne aktienbasierte Vergütung, Restrukturierung und weitere Sondereffekte). Cash EBITDA wird nicht verwendet, weil es zeitliche Effekte aus Prime-Abos enthält.",
+    "ebitdaUnadj": "EBITDA laut eDreams ODIGEO nach Sondereffekten (Adjusted EBITDA minus Adjusted Items).",
     "revenueScope": "Revenue Margin (Konzernumsatz)",
     "specialCases": [
-      "Geschäftsjahr endet am 31. März."
+      "Geschäftsjahr endet am 31. März; GJ 2025 ist April 2025 bis März 2026.",
+      "Umsatz ist die Revenue Margin ohne bereinigte Umsatzposten; im Halbjahr entspricht sie dem IFRS-Umsatz."
     ]
   }
 }
