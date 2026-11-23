@@ -82,7 +82,9 @@ export async function searchSec(q: string): Promise<SearchHit[]> {
   const needle = q.trim().toLowerCase();
   const all = Object.values(data);
   const exact = all.filter((e) => e.ticker.toLowerCase() === needle);
-  const byName = all.filter((e) => e.title.toLowerCase().includes(needle) && !exact.includes(e));
+  const esc = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const wordStart = new RegExp(`(^|[^a-z0-9])${esc}`, "i");
+  const byName = all.filter((e) => wordStart.test(e.title) && !exact.includes(e));
   const seen = new Set<number>();
   return [...exact, ...byName]
     .filter((e) => (seen.has(e.cik_str) ? false : (seen.add(e.cik_str), true)))
@@ -117,23 +119,36 @@ interface FactUnit {
 
 type Facts = { facts: Record<string, Record<string, { units: Record<string, FactUnit[]> }>> };
 
-function annualValues(facts: Facts, taxonomy: string, concepts: string[]): { concept: string; unit: string; rows: FactUnit[] } | null {
+// Companies switch XBRL concepts over time (e.g. "Revenues" until 2018, then
+// "RevenueFromContractWithCustomer…"). So we merge across concepts: for each
+// period end, the first concept in priority order that reports it wins, and
+// within one concept the latest filing wins.
+function annualValues(
+  facts: Facts,
+  taxonomy: string,
+  concepts: string[],
+): { concept: string; unit: string; rows: (FactUnit & { concept: string })[] } | null {
   const tax = facts.facts[taxonomy];
   if (!tax) return null;
+  const byEnd = new Map<string, FactUnit & { concept: string }>();
+  let unit = "";
   for (const c of concepts) {
     const entry = tax[c];
     if (!entry) continue;
-    for (const [unit, rows] of Object.entries(entry.units)) {
+    for (const [u, rows] of Object.entries(entry.units)) {
+      if (unit && u !== unit) continue;
       const annual = rows.filter((r) => r.start && days(r.start, r.end) > 350 && days(r.start, r.end) < 380 && /^(10-K|20-F|40-F)/.test(r.form));
-      if (annual.length) {
-        // Latest filing wins for each period end
-        const byEnd = new Map<string, FactUnit>();
-        for (const r of annual.sort((a, b) => a.filed.localeCompare(b.filed))) byEnd.set(r.end, r);
-        return { concept: c, unit, rows: Array.from(byEnd.values()) };
-      }
+      if (!annual.length) continue;
+      unit = unit || u;
+      const latest = new Map<string, FactUnit>();
+      for (const r of annual.sort((a, b) => a.filed.localeCompare(b.filed))) latest.set(r.end, r);
+      for (const [end, r] of latest) if (!byEnd.has(end)) byEnd.set(end, { ...r, concept: c });
+      break;
     }
   }
-  return null;
+  if (!byEnd.size) return null;
+  const rows = Array.from(byEnd.values()).sort((a, b) => a.end.localeCompare(b.end));
+  return { concept: rows[rows.length - 1].concept, unit, rows };
 }
 
 const SEC_CONCEPTS = {
@@ -217,7 +232,7 @@ export async function checkSec(cik: string, withDescription: boolean): Promise<C
         revenue: row.val / 1e6,
         ebit: find(ebit) !== null ? (find(ebit) as number) / 1e6 : null,
         da: find(da) !== null ? (find(da) as number) / 1e6 : null,
-        marketing: m ? { tag: mk!.concept, value: m.val / 1e6 } : null,
+        marketing: m ? { tag: m.concept, value: m.val / 1e6 } : null,
       });
     }
     periods.sort((a, b) => a.key.localeCompare(b.key));
@@ -326,14 +341,36 @@ export async function checkEsef(lei: string): Promise<CheckResult> {
   const messages: string[] = [];
   const periods: LivePeriod[] = [];
   let currency = "EUR";
-  const latest = res.data.find((f) => f.attributes.json_url);
+  // Latest report plus the one a year earlier, so three fiscal years are covered.
+  const withJson = res.data.filter((f) => f.attributes.json_url && f.attributes.period_end <= "2026-11-22");
+  const latest = withJson[0];
+  const prevYear = latest ? String(Number(latest.attributes.period_end.slice(0, 4)) - 1) : "";
+  const previous = withJson.find((f) => f.attributes.period_end.slice(0, 4) === prevYear);
   if (latest?.attributes.json_url) {
     try {
-      const doc = await getJson<XbrlJson>(XBRL + latest.attributes.json_url);
-      const rev = xbrlAnnual(doc, ["ifrs-full:Revenue", "ifrs-full:RevenueFromContractsWithCustomers"]);
-      const ebit = xbrlAnnual(doc, ["ifrs-full:ProfitLossFromOperatingActivities"]);
-      const da = xbrlAnnual(doc, ["ifrs-full:DepreciationAndAmortisationExpense", "ifrs-full:DepreciationAmortisationAndImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss"]);
-      const mk = xbrlAnnual(doc, ["ifrs-full:SellingExpense", "ifrs-full:DistributionCosts"]);
+      const docs = (await Promise.all(
+        [latest, previous].filter(Boolean).map((f) => getJson<XbrlJson>(XBRL + f!.attributes.json_url).catch(() => null)),
+      )).filter((d): d is XbrlJson => d !== null);
+      if (!docs.length) throw new Error("Bericht nicht abrufbar");
+      const pick = (concepts: string[]) => docs.flatMap((d) => xbrlAnnual(d, concepts));
+      const sumOf = (a: string[], b: string[]) => {
+        const x = pick(a);
+        const y = pick(b);
+        return x.flatMap((v) => {
+          const w = y.find((z) => z.end === v.end);
+          return w ? [{ ...v, value: Math.abs(v.value) + Math.abs(w.value) }] : [];
+        });
+      };
+      const rev = pick(["ifrs-full:Revenue", "ifrs-full:RevenueFromContractsWithCustomers"]);
+      const ebit = pick(["ifrs-full:ProfitLossFromOperatingActivities"]);
+      let da = pick([
+        "ifrs-full:DepreciationAndAmortisationExpense",
+        "ifrs-full:DepreciationAmortisationAndImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss",
+        "ifrs-full:AdjustmentsForDepreciationAndAmortisationExpense",
+        "ifrs-full:AdjustmentsForDepreciationAndAmortisationExpenseAndImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss",
+      ]);
+      if (!da.length) da = sumOf(["ifrs-full:DepreciationExpense", "ifrs-full:AdjustmentsForDepreciationExpense"], ["ifrs-full:AmortisationExpense", "ifrs-full:AdjustmentsForAmortisationExpense"]);
+      const mk = pick(["ifrs-full:SellingExpense", "ifrs-full:DistributionCosts"]);
       if (rev[0]) currency = rev[0].unit || currency;
       for (const r of rev) {
         const key = fyKey(r.start, r.end);
@@ -352,6 +389,8 @@ export async function checkEsef(lei: string): Promise<CheckResult> {
       }
       periods.sort((a, b) => a.key.localeCompare(b.key));
       if (!periods.length) messages.push("Im ESEF-Bericht keine Umsatzzeile ohne Segmentaufteilung gefunden.");
+      if (periods.length && periods.every((p) => p.ebit === null)) messages.push("Betriebsergebnis nicht als Standard-Kennzahl getaggt; EBITDA-Marge daher nicht automatisch berechenbar.");
+      else if (periods.length && periods.every((p) => p.da === null)) messages.push("Abschreibungen nicht als eigene ESEF-Kennzahl gefunden; EBITDA-Marge daher nicht automatisch berechenbar.");
     } catch (e) {
       messages.push(`ESEF-Bericht nicht lesbar: ${(e as Error).message}`);
     }

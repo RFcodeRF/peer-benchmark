@@ -22,6 +22,8 @@ export async function GET(req: Request) {
     settle("filings.xbrl.org", () => searchEsef(q)),
     companiesHouseConfigured() ? settle("Companies House", () => searchCompaniesHouse(q)) : Promise.resolve([] as SearchHit[]),
   ]);
+  if (!esef.length && !sec.length)
+    notes.push("filings.xbrl.org: kein ESEF-Treffer. Deutsche Abschlüsse sind dort oft nicht erfasst (Quelle wäre das Unternehmensregister); bitte über „Nicht gefunden“ manuell prüfen.");
   if (!companiesHouseConfigured()) notes.push("Companies House ist nicht eingerichtet; britische Privatunternehmen bitte manuell prüfen.");
   notes.push("Französische Unternehmen: keine automatische Abfrage eingerichtet (Pappers). Bitte manuell prüfen.");
   return NextResponse.json({ results: [...sec, ...esef, ...ch], notes });
