@@ -450,7 +450,7 @@ export function LiveCheck({ candidates }: { candidates: Candidate[] }) {
                 <p className="text-xs text-[var(--text-2)]">
                   Aus dem verlinkten Abschluss, in Millionen{currency ? ` ${currency}` : " (Originalwährung)"}, Komma oder Punkt als Dezimalzeichen. Ein eingetragenes Jahr ersetzt die automatischen Werte dieses Jahres. Marketing ist optional; daraus entsteht die Marketingmarge. Label „Manuell“.
                 </p>
-                <label className="mt-2 flex items-center gap-2 text-sm">
+                <label className="mt-2 flex flex-wrap items-center gap-2 text-sm">
                   <span className="text-[var(--text-2)]">Geschäftsjahr endet im</span>
                   <select value={endMonth} onChange={(e) => setEndMonth(Number(e.target.value))} className="field px-2 py-1 text-sm">
                     {MONTHS.map((m, i) => (
@@ -461,15 +461,15 @@ export function LiveCheck({ candidates }: { candidates: Candidate[] }) {
                   </select>
                 </label>
                 <div className="scroll-x mt-2">
-                  <table className="data min-w-[560px]">
+                  <table className="data min-w-[470px]">
                     <thead>
                       <tr>
-                        <th>Geschäftsjahr</th>
+                        <th>GJ</th>
                         <th className="num">Umsatz</th>
                         <th className="num">EBIT</th>
-                        <th className="num">Abschreibungen</th>
+                        <th className="num">Abschr.</th>
                         <th className="num">Marketing</th>
-                        <th className="num">EBITDA-Marge</th>
+                        <th className="num">EBITDA</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -478,9 +478,9 @@ export function LiveCheck({ candidates }: { candidates: Candidate[] }) {
                         const dates = e ?? manualDates(key, endMonth);
                         return (
                           <tr key={key}>
-                            <td className="whitespace-nowrap text-xs">
-                              {periodLabel(key, dates.start, dates.end)}
-                              {e && <div className="mt-0.5"><LabelBadge label={e.origin === "manual" ? "Manuell" : "Automatisch erfasst"} /></div>}
+                            <td className="whitespace-nowrap text-xs" title={periodLabel(key, dates.start, dates.end)}>
+                              <div className="font-bold text-[13px]">{key.slice(2)}</div>
+                              {e && <div className="mt-0.5"><LabelBadge label={e.origin === "manual" ? "Manuell" : "Auto"} /></div>}
                             </td>
                             {(["revenue", "ebit", "da", "marketing"] as const).map((f) => (
                               <td key={f} className="num">
@@ -490,7 +490,7 @@ export function LiveCheck({ candidates }: { candidates: Candidate[] }) {
                                   onChange={(ev) => setCell(key, f, ev.target.value)}
                                   placeholder={e && e.origin === "auto" && f !== "marketing" ? String((f === "revenue" ? e.revenue : f === "ebit" ? e.ebit : e.da) ?? "").replace(".", ",").slice(0, 8) : ""}
                                   aria-label={`${periodLabel(key, dates.start, dates.end)} ${f === "revenue" ? "Umsatz" : f === "ebit" ? "EBIT" : f === "da" ? "Abschreibungen" : "Marketing"}`}
-                                  className="field w-24 px-2 py-1 text-right text-sm tabular"
+                                  className="field w-[72px] px-1.5 py-1 text-right text-sm tabular"
                                 />
                               </td>
                             ))}

@@ -13,6 +13,7 @@ const LABEL_STYLE: Record<string, string> = {
   "KI-Vorschlag": "bg-[#f1ecfb] text-[#4a3aa7] border-[#d6cdf3]",
   "Vorbereitete Einschätzung": "bg-[#eef0f4] text-[#2d3a4f] border-[#d3d8e2]",
   Manuell: "bg-[#fff1e0] text-[#8a4600] border-[#f6c992]",
+  Auto: "bg-[#f1ecfb] text-[#4a3aa7] border-[#d6cdf3]",
   Entwurf: "bg-white text-[#75736e] border-[#d3d8e2]",
 };
 
