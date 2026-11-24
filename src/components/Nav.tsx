@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSelection } from "./SelectionProvider";
 
 const ITEMS = [
   { href: "/", label: "Peer-Gruppe" },
@@ -13,12 +12,10 @@ const ITEMS = [
 
 export function Nav() {
   const path = usePathname();
-  const sel = useSelection();
   return (
     <nav className="flex gap-1 overflow-x-auto -mb-px" aria-label="Hauptnavigation">
       {ITEMS.map((it) => {
         const active = it.href === "/" ? path === "/" : path.startsWith(it.href);
-        const count = it.href === "/marketing" ? sel.tab1.length : it.href === "/eigenkapitalkosten" ? sel.tab2.length : null;
         return (
           <Link
             key={it.href}
@@ -29,7 +26,6 @@ export function Nav() {
             }`}
           >
             {it.label}
-            {count !== null && <span className="ml-1.5 rounded-full bg-white/20 px-1.5 py-0.5 text-xs font-normal tabular" title="aktive Peers">{count}</span>}
           </Link>
         );
       })}

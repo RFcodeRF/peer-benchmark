@@ -131,6 +131,11 @@ export function Eigenkapitalkosten({ peers, betas, capital, params }: { peers: P
           </div>
           <Slider
             label="Basiszins (IDW S 1)"
+            tip={
+              <>
+                Risikoloser Zins nach IDW S 1, dem Bewertungsstandard des Instituts der Wirtschaftsprüfer. Abgeleitet aus der Zinsstrukturkurve der Deutschen Bundesbank für deutsche Staatsanleihen, über drei Monate gemittelt, in einen einheitlichen Zins für unbegrenzte Laufzeit umgerechnet und auf 0,25 Prozentpunkte gerundet. Stand {deDate(params.riskFree.asOf)}: {pct(params.riskFree.value, 2)}.
+              </>
+            }
             value={rf}
             min={0.02}
             max={0.05}
@@ -141,6 +146,11 @@ export function Eigenkapitalkosten({ peers, betas, capital, params }: { peers: P
           />
           <Slider
             label="Marktrisikoprämie (FAUB)"
+            tip={
+              <>
+                Mehrrendite, die Anleger für Aktien gegenüber einer risikolosen Anlage verlangen. FAUB ist der Fachausschuss für Unternehmensbewertung und Betriebswirtschaft des Instituts der Wirtschaftsprüfer (IDW); er empfiehlt die Bandbreite für deutsche Bewertungen. Empfehlung vom {deDate(params.mrp.asOf)}: {pct(params.mrp.low, 2)} bis {pct(params.mrp.high, 2)} vor persönlichen Steuern. Startwert ist die Mitte, {pct(params.mrp.start, 2)}.
+              </>
+            }
             value={mrp}
             min={params.mrp.low}
             max={params.mrp.high}
@@ -151,6 +161,7 @@ export function Eigenkapitalkosten({ peers, betas, capital, params }: { peers: P
           />
           <Slider
             label="Ziel-FK/EK"
+            tip="Verschuldungsgrad, mit dem das unverschuldete Beta wieder verschuldet wird: Nettofinanzverschuldung ÷ Börsenwert. Startwert ist der Median der aktiven Peers."
             value={de}
             min={0}
             max={1}
@@ -161,7 +172,7 @@ export function Eigenkapitalkosten({ peers, betas, capital, params }: { peers: P
               <span>
                 Median der aktiven Peers: {pct(autoDE, 0)}
                 {targetDE !== null && (
-                  <button type="button" className="ml-2 underline text-[var(--blue-dark)]" onClick={() => setTargetDE(null)}>
+                  <button type="button" className="ml-2 underline text-[var(--blue)]" onClick={() => setTargetDE(null)}>
                     Median übernehmen
                   </button>
                 )}
@@ -169,7 +180,10 @@ export function Eigenkapitalkosten({ peers, betas, capital, params }: { peers: P
             }
             markers={portalRows.filter((r) => r.de !== null).map((r) => ({ value: Math.min(1, r.de as number), label: peerName(r.peerId) }))}
           />
-          <Slider label="Zuschlag (Größe, Illiquidität)" value={premium} min={0} max={0.03} step={0.0025} onChange={setPremium} display={pct(premium, 2)} hint="Standard aus; nur mit Begründung zuschalten." />
+          <Slider
+            label="Zuschlag (Größe, Illiquidität)"
+            tip="Optionaler Aufschlag auf die Eigenkapitalkosten für kleine oder schwer handelbare Unternehmen. Standardmäßig 0; nur mit Begründung setzen."
+            value={premium} min={0} max={0.03} step={0.0025} onChange={setPremium} display={pct(premium, 2)} hint="Standard aus; nur mit Begründung zuschalten." />
           <div>
             <div className="text-sm font-medium mb-2">Sensitivitäten</div>
             <div className="space-y-2">
@@ -333,6 +347,7 @@ function ResultCard({ title, sub, result, rf, mrp, premium, de, sens }: { title:
 
 function Slider({
   label,
+  tip,
   value,
   min,
   max,
@@ -343,6 +358,7 @@ function Slider({
   markers,
 }: {
   label: string;
+  tip?: React.ReactNode;
   value: number;
   min: number;
   max: number;
@@ -355,7 +371,7 @@ function Slider({
   return (
     <div>
       <div className="flex justify-between text-sm">
-        <label className="font-medium">{label}</label>
+        {tip ? <Tip label={<span className="font-medium">{label}</span>} tip={tip} /> : <label className="font-medium">{label}</label>}
         <span className="tabular font-semibold">{display}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} aria-label={label} />

@@ -121,7 +121,7 @@ export function PeerGroup({ peers, scores, candidates }: { peers: Peer[]; scores
                       <td colSpan={6}>
                         <div className="grid gap-4 md:grid-cols-2 py-1">
                           <div>
-                            <div className="text-xs font-semibold text-[var(--text-2)] mb-1">Einschätzung in zwei Sätzen</div>
+                            <div className="text-xs font-semibold text-[var(--text-2)] mb-1">Einschätzung</div>
                             <p className="text-sm">{r.score.sentences[0]}</p>
                             <p className="text-sm mt-1">{r.score.sentences[1]}</p>
                             <div className="text-xs text-[var(--text-2)] mt-2">
