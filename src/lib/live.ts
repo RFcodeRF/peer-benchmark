@@ -611,7 +611,7 @@ export async function checkCompaniesHouse(number: string): Promise<CheckResult> 
   if (ix.length) {
     const res = ixbrlPeriods(ix);
     periods = res.periods;
-    if (!res.anyRevenue) messages.push("Digitaler Abschluss ohne Umsatzzeile (z. B. Kleinstunternehmen ohne Gewinn- und Verlustrechnung). Zahlen bitte unten manuell eintragen.");
+    if (!res.anyRevenue) messages.push("Digitaler Abschluss gefunden, aber der Umsatz ist darin nicht maschinenlesbar markiert: Kleinstunternehmen reichen keine Gewinn- und Verlustrechnung ein, und viele Firmen markieren nur Bilanz und Anhang. Zahlen bitte aus dem verlinkten Abschluss unten manuell eintragen.");
     else if (periods.every((p) => p.ebit === null || p.da === null)) messages.push("Betriebsergebnis oder Abschreibungen im digitalen Abschluss nicht gefunden; EBITDA-Marge daher nicht automatisch berechenbar. Fehlende Zahlen unten manuell eintragen.");
   } else if (accounts.length) {
     messages.push("Die Abschlüsse liegen nur als PDF vor (meist ein Scan). Die App kann sie verlinken, aber nicht zuverlässig auswerten. Zahlen bitte aus dem verlinkten PDF unten manuell eintragen.");
